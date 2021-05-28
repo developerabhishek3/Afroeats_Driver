@@ -1,0 +1,104 @@
+
+4. Se connecter
+Email
+Mot de passe
+Se souvenir de moi
+Mot de passe oublié?
+Se connecter
+Continuer avec Facebook
+Continuer avec Gmail
+Ou
+ S'inscrire
+
+4.1 S'inscrire
+Prenom
+Nom
+Courriel
+N de rue
+Rue
+Code Postal
+Telephone
+Mot de passe
+Accepter tous les termes et conditions
+Se connecter
+
+5.Ghita
+NOS RESTAURANTS
+RESTAURANT AFRO-A
+6 Rue Godefroy Cavaignac, 75011
+Parrainez vos amis et gagner 5€  sur votre prochaine commande
+20 Rue Boussingault, 75013 Paris
+
+5.1 Aucun restaurant disponible près 
+de chez vous
+Parrainez vos amis et gagner 5€  sur votre prochaine commande
+
+5.2 Selectionnez un restaurant
+RESTAURANT AFRO
+RESTAURANT AFRO-B
+RESTAURANT AFRO-C
+RESTAURANT AFRO-D
+RESTAURANT AFRO-E
+RESTAURANT AFRO-F
+Oui
+
+6.RESTAURANT AFRO
+CUISINE AFRIQUE D'OUEST
+15 min
+ENTREES PLATS DESSERTS BOISSONS
+SOYA
+Brochettes d'emince de boeuf,marine,panne a la semoule de manioc et braise  12,50
+
+7. Soya
+Brochettes d'emince de boeuf,marine,panne a la semoule de manioc et braise
+1 2 
+Ajouter au panier
+
+14 1xSOYA
+passer votre commande
+
+16.Mon Profil
+Ghita Benzakour
+Numero de carte
+**** **** **** 0765
+Date d'expiration
+08/2022
+Mondifier ma carte
+
+17. Commande
+     enregistree
+Reccuperation de la commande 
+Livraison
+Annuler ma commande
+
+19.Me plats favoris
+Mon mode de Paiement
+J,ai une question
+mes promos
+Devenez un coursier partenaire
+A propos
+
+20.Mes Plats favoris
+Lorem ipsum
+20rus de meudon 75009
+
+21.Mon mode de Paiement
+**** **** **** 9090
+**** **** **** 9078
+
+22.Supprimer la carte
+Etes-vous sur de vouloir
+supprimer la carte
+Oui Non
+
+23.j'ai une question
+Questions fréquemment posées
+Ma commande n'a pas été livrée?
+
+24.Mes  Promos
+20% de réduction sur les snacks
+Utiliser
+10% de réduction sur les desserts
+NOS RESTAURANTS
+
+

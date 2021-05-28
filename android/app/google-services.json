@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "478814300525",
+    "project_id": "afroeats-db029",
+    "storage_bucket": "afroeats-db029.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478814300525:android:31d020fb043b7faa1a9264",
+        "android_client_info": {
+          "package_name": "com.afroeatsdelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478814300525-64grvt7s85c3paerrsdkuo8j6sqq9chs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afroeatsdelivery",
+            "certificate_hash": "1e2382a4c035cc06aadd2f006f2c9a0defca8b8b"
+          }
+        },
+        {
+          "client_id": "478814300525-uiga0ilm4hkvvvq4a6nv24n9252bo6n5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-5lcpYVGW_U9_AN5Aj6H05zxL7VdQ8WI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478814300525-uiga0ilm4hkvvvq4a6nv24n9252bo6n5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

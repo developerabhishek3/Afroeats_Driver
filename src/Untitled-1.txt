@@ -1,0 +1,910 @@
+
+IGQVJXMW4zSkszaWxYZAU5CNTNfVC10ZADRNcnc1TVVqeUEzdDZALTTQycTlzTzIwWmxjRlVoUmxMREoydVd2TmpmTVdLVldiMHhDWGVfVVhCaW16UTl0NGJYZA0llN09SRUdHcWlMQ3NCR3VJNl9RMlJKdAZDZD
+
+
+
+
+								user id                                            token
+https://graph.instagram.com/17841440147695011?fields=id,username&access_token=IGQVJYTlJQcHpOYmIzWmpubVhOSnV2SHlMbWw2dWIybzBZAUFBsUzV0N1ZAzamVEdlJNNWtyd09IR0RsamdrQnZAHTU51VkduUGU1SGllOHVRTHRtRUxYc3JCVGtaR2luMW5OaUJkSDRWY2tHS2oxUl9UTTlEa2xlME56MnJN
+
+
+
+# : INFLUENCER USER REGISTRATION VIA INSTAGRAM
+
+https://www.thelyfe.fr/api/registration_via_instagram
+
+Method : POST
+
+Parameters :
+1. instagram_username *
+2. followers_count *
+3. first_name *
+4. last_name *
+5. email *
+6. telephone_no *
+7. birth_date * (yyyy-mm-dd)
+8. address *
+9. postcode *
+10. city *
+11. country *
+12. device_token *
+
+Headers :
+x-api-key : thelyfeapp@2020
+
+Response :
+user_info : ''
+status : true/false
+message : ''
+
+
+
+# : LOGIN (INSTAGRAM LOGIN API)
+
+https://www.thelyfe.fr/api/login_via_instagram
+
+Method : POST
+
+parameters :
+1. instagram_username *
+2. followers_count *
+3. first_name *
+4. last_name *
+5. email *
+6. device_token *
+
+headers :
+x-api-key : thelyfeapp@2020
+
+Response :
+pre_url : ''
+user_info : object
+user_id : ''
+token : ''
+status : true/false
+message : ''
+
+
+# : LOGIN (MANUAL LOGIN API)
+
+https://www.thelyfe.fr/api/login
+
+Method : POST
+
+parameters :
+1. email *
+2. password *
+3. device_token *
+
+headers :
+x-api-key : thelyfeapp@2020
+
+Response :
+pre_url : ''
+user_info : object
+user_id : ''
+token : ''
+status : true/false
+message : ''
+
+
+# : CHECK ACCOUNT ACTIVE/INACTIVE STATUS
+
+https://www.thelyfe.fr/api/check_account
+
+Note : Make sure that user will not able to access this API directly.
+
+Method : POST
+
+parameters :
+1. user_id
+
+headers :
+x-api-key : thelyfeapp@2020
+
+Response :
+status : true/false
+message : ''
+
+
+# : CHECK ACCOUNT EXIST OR NOT
+
+https://www.thelyfe.fr/api/account_exist
+
+Note : You have to pass user email address to check that account is exist or not.
+if exist then user will do login otherwise registration.
+
+Method : POST
+
+parameters :
+1. email
+
+headers :
+x-api-key : thelyfeapp@2020
+
+Response :
+status : true/false
+message : ''
+
+
+
+
+
+
+
+https://www.thelyfe.fr/api/insta_follower_count
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+
+Response :
+insta_follower_count : numeric value,
+status : true/false
+message : ''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// completed api..................
+
+# : GET ALL CATEGORY
+
+https://www.thelyfe.fr/api/all_category
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'categories' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+<!-- ADVERTISEMENT API START HERE -->
+
+# : GET ALL ADVERTISEMENT
+
+https://www.thelyfe.fr/api/all_advertisement    /// marvel app 22   
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'advertisements' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+# : ADVERTISEMENT DETAIL
+
+https://www.thelyfe.fr/api/advertisement_detail    /// marvel app 11
+
+Method : POST
+
+parameters :
+1. ad_id *
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'ad_info' => Array/Object,
+'ad_rewards' => Array/Object,
+'ad_conditions' => Array/Object,
+'ad_datetime' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+# : ADVERTISEMENT BY CATEGORY (BY SPECIFIC ONE CATEGORY)
+
+https://www.thelyfe.fr/api/advertisement_by_category  /// marvel app 10
+
+Method : POST
+
+parameters :
+1. category_id *
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'advertisements' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+# : MY PROFILE
+
+https://www.thelyfe.fr/api/my_profile
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'my_profile' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+# : CHANGE PASSWORD
+
+https://www.thelyfe.fr/api/change_password
+
+Method : POST
+
+parameters :
+1. old_password
+2. new_password
+3. confirm_new_password
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+
+
+
+
+// working api.......................
+
+
+
+
+# : Ad APPOINTMENT/RESERVATION
+
+https://www.thelyfe.fr/api/ad_reservation    //16 page marvel app
+
+Method : POST
+
+parameters :
+1. ad_id *
+2. reserve_date * (yyyy-mm-dd)
+3. reserve_time * (hh:mm)
+4. message (optional)
+
+NOTE : Now, check from your side that which type of Ad like
+if Ad belongs to visit_to_place (Yes) = No need to use shipping form and
+if Ad belongs to visit_to_place (No) = Need to use shipping form
+
+5. full_name
+6. shipping_address
+7. postcode
+8. phone_no
+9. city
+10. country
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+
+
+
+
+
+GET MY ALL PENDING APPOINTMENT / RESERVATION
+
+https://www.thelyfe.fr/api/my_pending_reservation
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'reservation' => '',
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+# : GET MY ALL APPROVED APPOINTMENT / RESERVATION
+
+https://www.thelyfe.fr/api/my_approve_reservation
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'reservation' => '',
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+# : GET MY ALL CANCELLED APPOINTMENT / RESERVATION
+
+https://www.thelyfe.fr/api/my_cancel_reservation
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'reservation' => '',
+'status' => TRUE/FALSE,
+"message" => ""
+
+GET MY ALL RESCHEDULE APPOINTMENT / RESERVATION
+
+https://www.thelyfe.fr/api/my_reschedule_reservation
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'reservation' => '',
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+
+
+# : Ad RESERVATION/APPOINTMENT CANCELLATION BY INFLUENCER
+
+https://www.thelyfe.fr/api/ad_reservation_cancel
+
+Method : POST
+
+parameters :
+1. appointment_id *
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+
+ 
+
+
+
+
+# : FAVOURITE Ad ADD/REMOVE
+
+https://www.thelyfe.fr/api/favourite_ad
+
+Method : POST
+
+parameters :
+1. ad_id (mandatory)
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+status : true/false
+is_favourite : 0/1 (0 = not favourite , 1 = favourite)
+message : ''
+
+# : MY FAVOURITE Ad LIST
+
+https://www.thelyfe.fr/api/my_favourite_ad
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+pre_url : '',
+Ad_list : '',
+status : true/false
+message : ''
+
+
+
+
+
+# : UPDATE INFLUENCER PROFILE INFORMATION
+
+https://www.thelyfe.fr/api/update_profile
+
+Method : POST
+
+parameters :
+1. instagram_username *
+2. first_name *
+3. last_name *
+4. telephone_no *
+5. birth_date * (yyyy-mm-dd)
+6. address *
+7. postcode *
+8. city *
+9. country *
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+
+
+
+# : FILTER ADVERTISEMENT BY CATEGORIES (FILTER BY SELECTED CATEGORIES)
+
+https://www.thelyfe.fr/api/advertisement_filter_by_category
+
+Method : POST
+
+parameters :
+1. category_id[] *
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+
+# : CATEGORY WITH ADVERTISEMENT         // no advisement data found 
+
+https://www.thelyfe.fr/api/category_with_advertisement
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'advertisements' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+
+
+
+
+
+
+
+
+
+# : INFLUENCER USER REGISTRATION
+
+	 https://www.thelyfe.fr/api/registration_influencer 
+
+	Method : POST
+	
+	Parameters :
+		1. instagram_username *
+		2. first_name *
+		3. last_name *
+		4. email *
+		5. password *
+		6. telephone_no *
+		7. birth_date * (yyyy-mm-dd)
+		8. address *
+		9. postcode *
+		10. city *
+		11. country *	
+	
+	Headers : 
+		x-api-key : thelyfeapp@2020
+		
+	Response : 
+			user_info : ''
+			status : true/false
+			message : ''
+		
+# : LOGIN
+
+	 https://www.thelyfe.fr/api/login 
+
+	Method : POST
+	
+	parameters :
+		1. email *
+		2. password *
+		3. device_token *
+		
+	headers : 
+		x-api-key : thelyfeapp@2020
+		
+	Response : 
+			pre_url : ''
+			user_info : object
+			user_id : ''
+			token : ''
+			status : true/false
+			message : ''
+			
+			
+# : LOGOUT	
+
+		 https://www.thelyfe.fr/api/logout 
+
+		Method : GET
+		
+		parameters :
+
+		headers : 
+			x-api-key : thelyfeapp@2020
+			user-id : ''
+			token : ''
+			
+		Response : 
+				status : true/false
+				message : ''
+				
+
+
+# : FORGOT PASSWORD REQUEST 1
+
+	 https://www.thelyfe.fr/api/forgotpassword_req_1 
+
+		Note : this API will send a validation code to given email.
+
+		Method : POST
+		
+		parameters :
+			1. email
+		
+		headers : 
+			x-api-key : thelyfeapp@2020
+			
+		Response : 
+				expire_time : '' (you will get datetime and also you can make timer)
+				status : true/false
+				message : ''
+
+
+# : FORGOT PASSWORD REQUEST 2
+
+	 https://www.thelyfe.fr/api/forgotpassword_req_2 
+
+		Note : after validate your code. You need to make a new screen for set new password.
+		
+		Method : POST
+		
+		parameters :
+			1. email *
+			1. vcode *
+		
+		headers : 
+			x-api-key : thelyfeapp@2020
+			
+		Response : 
+				status : true/false
+				message : ''
+
+# : SET NEW PASSWORD REQUEST
+
+	 https://www.thelyfe.fr/api/setpassword 
+
+		Note : Make sure that user will not able to access this screen directly.
+		
+		Method : POST
+		
+		parameters :
+			1. email
+			1. password
+		
+		headers : 
+			x-api-key : thelyfeapp@2020
+			
+		Response : 
+				status : true/false
+				message : ''
+
+
+# : CHECK ACCOUNT STATUS (ACTIVE / INACTIVE)
+
+	 https://www.thelyfe.fr/api/check_account 
+
+		Note : Make sure that user will not able to access this screen directly.
+		
+		Method : POST
+		
+		parameters :
+			1. user_id
+		
+		headers : 
+			x-api-key : thelyfeapp@2020
+			
+		Response : 
+				status : true/false
+				message : ''
+			
+
+# : FAQs
+
+		 https://www.thelyfe.fr/api/faq 
+
+		Method : GET
+				
+		parameters :
+			
+		headers : 
+			x-api-key : thelyfeapp@2020
+			user-id : ''
+			token : ''
+			
+		Response :
+				faq : Array/Object,
+				status : true/false
+				message : ''
+
+
+# : ADMIN CONTACT INFORMATON
+	
+		 https://www.thelyfe.fr/api/admin_contact_info 
+
+		Method : GET
+				
+		parameters :
+			
+		headers : 
+			x-api-key : thelyfeapp@2020
+			user-id : ''
+			token : ''
+			
+		Response :
+				contact_info : Array/Object,
+				status : true/false
+				message : ''
+
+
+# : SOCIAL MEDIA SIGN-IN SIGN-UP ( FACEBOOK , GOOGLE , INSTAGRAM )
+
+		 https://www.thelyfe.fr/api/social_auth 
+
+		Method : POST
+
+		Parameters :
+			1. first_name *
+			2. last_name *
+			3. email *
+			4. birth_date * (YY-MM-DD)
+			5. phone *
+			6. profile_url
+			7. device_token *
+			8. reg_type  * (facebook,google,instagram)
+
+		Headers : 
+			x-api-key : thelyfeapp@2020
+			
+		Response : 
+				pre_url => base_url(),
+				user_info : object/array,
+				user_id : '',
+				token : '',
+				status : true/false
+				message : ''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# : MY PROFILE
+
+https://www.thelyfe.fr/api/my_profile
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'my_profile' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+
+# : CATEGORY WITH ADVERTISEMENT
+
+https://www.thelyfe.fr/api/category_with_advertisement
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'cate_with_ads' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+# : GET ALL ADVERTISEMENT
+
+https://www.thelyfe.fr/api/all_advertisement
+
+Method : GET
+
+parameters :
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'advertisements' => Array/Object,
+'status' => TRUE/FALSE,
+"message" => ""
+
+
+# : ADVERTISEMENT DETAIL
+
+https://www.thelyfe.fr/api/advertisement_detail
+
+Method : POST
+
+parameters :
+1. ad_id *
+
+headers :
+x-api-key : thelyfeapp@2020
+user-id : ''
+token : ''
+
+Response :
+'pre_url' => '',
+'ad_info' => Array/Object,
+'ad_gallery' => Array/Object,
+'ad_product_size' => Array/Object, // Show if data is coming , otherwise hide this section
+'ad_rewards' => Array/Object, // Show if data is coming , otherwise hide this section
+'ad_conditions' => Array/Object, // Show if data is coming , otherwise hide this section
+'ad_datetime' => Array/Object, // Show if data is coming , otherwise hide this section
+'status' => TRUE/FALSE,
+"message" => ""
