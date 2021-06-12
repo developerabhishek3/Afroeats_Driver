@@ -10,6 +10,7 @@ import {update_driver_lat_long,logout_function} from '../../../Api/afterAuth';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 import Spinner from 'react-native-loading-spinner-overlay';
+import moment from 'moment'
 class Home extends Component {
 
     constructor(props){
@@ -90,6 +91,10 @@ class Home extends Component {
       
          
        componentDidMount = async () => {
+        let todayDate = new Date().getTime()
+        let countdown = moment().seconds(45).format("ss")
+        
+        console.log("ggeetifhjfkhjkhkhkjkh  - - - - - - -  - -",countdown ,   todayDate)
       
       
 
@@ -120,9 +125,12 @@ class Home extends Component {
     requestLocationPermission();
   }    
 
-        setInterval(() => {
+        // setInterval(() => {
+          setTimeout(() => {
             this.update_driver_lat_longFunction()    
-           }, 7000);
+          }, 2000);
+            
+          //  }, 7000);
 
 
 
@@ -140,8 +148,8 @@ class Home extends Component {
         const UserId = JSON.parse(user_id)    
         const update_driver_lat_longResponse = await update_driver_lat_long({
             driver_id:UserId,
-            latitude:this.state.currentLatitude,
-            longitude:this.state.currentLongitude,
+            latitude:22.753284,
+            longitude:75.893700,
         });
         if (update_driver_lat_longResponse.result == true) {
         //   console.log('getting result here --------',update_driver_lat_longResponse.response,);
@@ -266,7 +274,10 @@ class Home extends Component {
                     <Text style={Styles.headerTxt}>de trajet </Text>
                 </View>
 
-                <TouchableOpacity style={Styles.continueBtn} onPress={()=>{this.props.navigation.navigate("onlineoffline")}}>
+                <TouchableOpacity style={Styles.continueBtn}
+                // onPress={()=>{this.props.navigation.navigate("onlineoffline")}}
+                onPress={()=>{this.props.navigation.navigate("orderrecieved")}}
+                >
                         <Text style={Styles.continueBtnTxt}>Aller en Ligne</Text>
                 </TouchableOpacity>
 
@@ -335,8 +346,7 @@ class Home extends Component {
                         }}>
                       Logout
                       </Text>
-                      </TouchableOpacity>
-                  
+                      </TouchableOpacity>                  
                   </View>
                   </View>
                 </View>
