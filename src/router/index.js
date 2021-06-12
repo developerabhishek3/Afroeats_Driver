@@ -28,12 +28,19 @@ import MyCommsion from '../components/notAuth/ProfileDetails/MyCommision';
 import QuestionAnswer from '../components/notAuth/ProfileDetails/QA';
 import MyDocs from '../components/notAuth/ProfileDetails/MyDocs';
 import AddDocs from '../components/auth/AddDocs';
+import OrderRecieved from '../components/OrderRecieved';
 
 
 const AppNavigator = createStackNavigator(
   {
     splash: {
       screen: Splash,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    orderrecieved:{
+      screen:OrderRecieved,
       navigationOptions: {
         headerShown: false,
       },
@@ -161,6 +168,7 @@ const AppNavigator = createStackNavigator(
         headerShown: false,
       },
     },
+    
     // forgotpassword:{
     //   screen:ForgotPassword,
     //   navigationOptions: {

@@ -19,9 +19,12 @@ class Login extends Component {
   userLoginFunction = async () => {
     // console.log("getting inside the function uuid --------",this.state.device_token)
     const {email, password, deviceToken} = this.state;
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    console.log("insdie the login page getting fcm token    - - - -- - ",fcmToken)    
     const loginUserResponse = await loginUser({
       email,
       password,
+      deviceToken:fcmToken
     });
     if (loginUserResponse.result == true) {
       console.log(
