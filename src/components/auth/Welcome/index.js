@@ -14,8 +14,16 @@ class Welcome extends Component {
       async componentDidMount() {
 
         try{
-          const userLoggedIn = await AsyncStorage.getItem('userLoggedIn') || 'false';   
-            if(userLoggedIn == 'true'){
+          const userLoggedIn = await AsyncStorage.getItem('userLoggedIn') || 'false';  
+          const isDocumentVerificationPending = await AsyncStorage.getItem('isDocumentVerificationPending') || 'false' ;
+          if(isDocumentVerificationPending == 'true'){
+            setTimeout(()=>{
+              this.setState({ isLoading: false,isSpinner:false },()=>{
+                this.props.navigation.navigate('adddocs');
+              });
+            },10);
+          }
+          else if(userLoggedIn == 'true'){
     
               console.log("geting login true side------------------")
               setTimeout(()=>{
@@ -24,11 +32,12 @@ class Welcome extends Component {
                 });
               },10);
             }
+           
             else {
               setTimeout(()=>{
                 console.log("geting login false side------------------")
                 this.setState({ isLoading: false,isSpinner:false },()=>{
-                  this.props.navigation.navigate('login');
+                  // this.props.navigation.navigate('login');
                 });
               },10);
             }      

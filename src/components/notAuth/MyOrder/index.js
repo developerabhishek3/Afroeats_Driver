@@ -66,7 +66,9 @@ class MyOrder extends Component {
           // console.log('getting reponse here=================',getmyOrdersResponse.response,);  
           var currentOrderData = getmyOrdersResponse.response.current_orders
           console.log('getting result here for current order --------',currentOrderData);
-          var pastOrderData = getmyOrdersResponse.response.past_orders  
+          var pastOrderData = getmyOrdersResponse.response.past_orders
+          var Images =  getmyOrdersResponse.response.past_orders.image_record
+          console.log("GEtting images  - - -",Images)
           // console.log('getting result here for past order --------',currentOrderData); 
           this.setState({currentOrderData,pastOrderData,isBodyLoaded:true,isSpinner:false})         
         }
@@ -190,6 +192,12 @@ isPastOrderDataFunction(){
 <View style={Styles.contentView}>
             {
                 this.state.pastOrderData.map((singleMAp)=>{
+                  console.log("getttin single MAp values - - - ",)
+                  let nestedArrayValue
+                  singleMAp.image_record.map((NEstedsingle)=>{
+                    nestedArrayValue = NEstedsingle
+                    // console.log("getting again value  -  - - - - - ",NEstedsingle)
+                  })
                     return(
                         
                         <TouchableOpacity 
@@ -199,12 +207,14 @@ isPastOrderDataFunction(){
                         style={{backgroundColor:"#404040",width:"100%",margin:7,alignSelf:"center",borderRadius:7}}>
                             <View style={{flexDirection:"row",}}>
                                 <View>
-                                     <Image source={require("../../../assets/icons/27.jpg")} style={{width:150,height:120,margin:6,borderRadius:3}} />                                    
+                                     <Image 
+                                     source={{uri:nestedArrayValue }}
+                                     style={{width:150,height:120,margin:6,borderRadius:3}} />                                    
                                      {/* <Image source={`https://food.afroeats.fr/public/upload/products/${singleMAp.image}`} style={{width:150,height:120,margin:6,borderRadius:3}} />                                     */}
                                 </View>
                                 <View style={{margin:10,flexWrap:"wrap"}}>
                                     <Text style={{fontSize:12,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:1,width:SCREEN_WIDTH/2.3}}>{singleMAp.pick_up_address}</Text>
-                                    <Text style={{fontSize:10,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:1,borderWidth:0,borderColor:"red",width:SCREEN_WIDTH/2.3}}>{singleMAp.delivery_address}</Text>
+                                    {/* <Text style={{fontSize:10,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:1,borderWidth:0,borderColor:"red",width:SCREEN_WIDTH/2.3}}>{singleMAp.delivery_address}</Text> */}
                                     <Text style={{fontSize:16,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:15,paddingTop:24,alignSelf:"flex-end",}}> {singleMAp.total} €</Text>
                                 </View>
                                 </View>
@@ -238,21 +248,26 @@ isPastOrderDataFunction(){
                 <View style={Styles.contentView}>
                 {
                     this.state.currentOrderData.map((singleMAp)=>{
-                        return(
-                            
+                      let nestedArrayValue
+                      singleMAp.image_record.map((NEstedsingle)=>{
+                        nestedArrayValue = NEstedsingle
+                        // console.log("getting again value  -  - - - - - ",NEstedsingle)
+                      })
+                        return(                            
                             <TouchableOpacity 
                                 onPress={()=>{this.props.navigation.navigate("orderdetails",{
                                   orderId:singleMAp.order_id
                                 })}}
-                            style={{backgroundColor:"#404040",width:"100%",margin:7,alignSelf:"center",borderRadius:7}}>
+                              style={{backgroundColor:"#404040",width:"100%",margin:7,alignSelf:"center",borderRadius:7}}>
                                 <View style={{flexDirection:"row",}}>
                                     <View>
-                                         <Image source={require("../../../assets/icons/27.jpg")} style={{width:150,height:120,margin:6,borderRadius:3}} />                                    
+                                         <Image  source={{uri:nestedArrayValue }} style={{width:150,height:120,margin:6,borderRadius:3}} />                                    
                                          {/* <Image source={`https://food.afroeats.fr/public/upload/products/${singleMAp.image}`} style={{width:150,height:120,margin:6,borderRadius:3}} />                                     */}
                                     </View>
                                     <View style={{margin:10,flexWrap:"wrap"}}>
                                         <Text style={{fontSize:12,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:1,width:SCREEN_WIDTH/2.3}}>{singleMAp.pick_up_address}</Text>
-                                        <Text style={{fontSize:10,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:1,borderWidth:0,borderColor:"red",width:SCREEN_WIDTH/2.3}}>{singleMAp.delivery_address}</Text>
+                                        {/* <Text style={{fontSize:10,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:1,borderWidth:0,borderColor:"red",width:SCREEN_WIDTH/2.3}}>{singleMAp.delivery_address}</Text> */}
+                                        <Text style={{fontSize:10,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:1,borderWidth:0,borderColor:"red",width:SCREEN_WIDTH/2.3}}>{singleMAp.order_date}</Text>
                                         <Text style={{fontSize:16,fontWeight:"700",fontFamily:"Ariel",color:"#FFFFFF",margin:15,paddingTop:24,alignSelf:"flex-end",}}> {singleMAp.total} €</Text>
                                     </View>
                                     </View>

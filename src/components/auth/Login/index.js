@@ -41,7 +41,29 @@ class Login extends Component {
         // await AsyncStorage.setItem('userLoggedInData',JSON.stringify(loginUserResponse.response));
         await AsyncStorage.setItem('token',JSON.stringify(loginUserResponse.response.token));
         await AsyncStorage.setItem('user_id',JSON.stringify(loginUserResponse.response.usersDetails.id));
-        this.props.navigation.navigate('home');
+        // let documentVerification = loginUserResponse.response.usersDetails.document_verification
+        // let personal_document_verification = loginUserResponse.response.usersDetails.document_verification
+        // if(documentVerification == 0){
+        //   console.log("FIRST CASE :  : : ")
+
+        //   this.props.navigation.navigate('adddocs');
+        //   await AsyncStorage.setItem('isDocumentVerificationPending', 'true');
+        // }      
+        // else if(personal_document_verification == 0){
+        //   console.log("SECOND CASE :  : : ")
+        //   this.props.navigation.navigate('adddocs');
+        //   await AsyncStorage.setItem('isDocumentVerification', 'true');
+        //   // ALert.alert("Message",`Votre document n'est pas approuvé par l'administrateur`)
+        // } 
+        // else if(documentVerification == 1){
+        //   console.log("THIRD CASE :  : : ")
+        //   // this.props.navigation.navigate('home');
+        //   ALert.alert("Message",`Votre document n'est pas approuvé par l'administrateur`)
+        // }
+        // else {
+        //   this.props.navigation.navigate('home');
+        // }
+       
       }
     } else {
       this.myAlert('Error', loginUserResponse.response.errorMessage);
@@ -134,7 +156,7 @@ async componentDidMount(){
           <Text style={Styles.headerTxt}>Se Connecter</Text>
         </View>
         <View style={Styles.mainContainer}>
-          <ScrollView>
+          <ScrollView keyboardShouldPersistTaps="always">
             <View style={Styles.textInputMainView}>
               <FloatingLabel
                 autoCapitalize="none"

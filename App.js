@@ -31,6 +31,7 @@ import Appcontainer from './src/router/index';
 
 
 import AsyncStorage from '@react-native-community/async-storage';
+import { topLevelNavigate, setTopLevelNav } from './navigationService';
 
 export default class App extends React.Component {
   constructor() {
@@ -65,23 +66,64 @@ export default class App extends React.Component {
     const UserId = JSON.parse(user_id)
     this.notificationListener = firebase.notifications().onNotification((notification) => {
       console.log("getting notification value here-------------",notification.data)
-      if(notification._data.reciever_id == UserId ){
-        const { title, body } = notification;
-        this.showAlert(title, body);
-      }    
+      // const { title, body } = notification;
+      // this.showAlert(title, body);   
+      let  OrderKey = notification.data.fcm_push_response;
+      let fcm_order_id = notification.data.fcm_order_id
+      console.log("getting orderKey one time - - -  - -",OrderKey,fcm_order_id)
+      if(OrderKey == "OrderAssigned" ) {
+          topLevelNavigate('orderrecieved', {           
+            OrderKey:OrderKey,
+            fcm_order_id:fcm_order_id   
+          });
+        }
+       
+         
+                 
       });      
       this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
       console.log("getting notification open value here-------------",notificationOpen.notification.data)
-      if(notificationOpen._data.reciever_id == UserId ){
-        const { title, body } = notificationOpen.notification;
-        this.showAlert(title, body);
-      }        
+          // if(notificationOpen._data.reciever_id == UserId ){
+            // const { title, body } = notificationOpen.notification;
+            // this.showAlert(title, body);
+        let  OrderKey = notificationOpen.notification.data.fcm_push_response;
+        let fcm_order_id = notificationOpen.notification.data.fcm_order_id
+        console.log("getting orderKey 2nd time - - -  - -",OrderKey , fcm_order_id)
+        if(OrderKey == "OrderAssigned" ) {
+          topLevelNavigate('orderrecieved', {           
+            OrderKey:OrderKey,
+            fcm_order_id:fcm_order_id       
+          });
+        }
+        // if(OrderKey != null && OrderKey != undefined && OrderKey != "" ) {
+        //   topLevelNavigate('orderrecieved', {
+        //     OrderKey:OrderKey,
+        //     fcm_order_id:fcm_order_id,       
+        //   });
+        // }
+         
+        // }        
       });
       
       const notificationOpen = await firebase.notifications().getInitialNotification();
       if (notificationOpen) {
-      const { title, body } = notificationOpen.notification;
-     this.showAlert(title, body);
+        let  OrderKey = notificationOpen.notification.data.fcm_push_response;
+        let fcm_order_id = notificationOpen.notification.data.fcm_order_id
+        console.log("getting orderKey 3rd time - - -  - -",OrderKey , fcm_order_id)
+        if(OrderKey == "OrderAssigned" ) {
+          topLevelNavigate('orderrecieved', {           
+            OrderKey:OrderKey,
+            fcm_order_id:fcm_order_id    
+          });
+        }
+        // if(OrderKey != null && OrderKey != undefined && OrderKey != "" ) {
+        //   topLevelNavigate('orderrecieved', {
+        //     OrderKey:OrderKey,
+        //     fcm_order_id:fcm_order_id,       
+        //   });
+        // }
+    //   const { title, body } = notificationOpen.notification;
+    //  this.showAlert(title, body);
       }
       
       this.messageListener = firebase.messaging().onMessage((message) => {
@@ -128,7 +170,7 @@ export default class App extends React.Component {
   render() {
       return (
         <SafeAreaView style={{ flex:1}}>
-          <Appcontainer />
+          <Appcontainer ref={(r) => setTopLevelNav(r)} />
         </SafeAreaView>
       )
   }
