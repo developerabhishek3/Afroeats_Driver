@@ -29,13 +29,21 @@ import QuestionAnswer from '../components/notAuth/ProfileDetails/QA';
 import MyDocs from '../components/notAuth/ProfileDetails/MyDocs';
 import AddDocs from '../components/auth/AddDocs';
 import OrderRecieved from '../components/OrderRecieved';
+
 import OpenFile from '../components/notAuth/ProfileDetails/MyDocs/OpenFile'
 import ChatScreen from '../components/notAuth/OrderDetails/Chat';
+
 
 const AppNavigator = createStackNavigator(
   {
     splash: {
       screen: Splash,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    orderrecieved:{
+      screen:OrderRecieved,
       navigationOptions: {
         headerShown: false,
       },
@@ -181,6 +189,7 @@ const AppNavigator = createStackNavigator(
         headerShown: false,
       },
     },
+    
     // forgotpassword:{
     //   screen:ForgotPassword,
     //   navigationOptions: {

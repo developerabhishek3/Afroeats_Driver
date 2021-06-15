@@ -1,4 +1,4 @@
-  
+
 import { NavigationActions } from 'react-navigation';
 import 'react-native-gesture-handler';
 

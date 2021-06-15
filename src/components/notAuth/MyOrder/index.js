@@ -52,7 +52,7 @@ class MyOrder extends Component {
     getmyOrdersFunction = async () => {       
       const user_id = await AsyncStorage.getItem('user_id');
       const UserId = JSON.parse(user_id)    
-      const getmyOrdersResponse = await getmyOrders({driver_id:130});
+      const getmyOrdersResponse = await getmyOrders({driver_id:UserId});
       if (getmyOrdersResponse.result == true) {
       
         if (getmyOrdersResponse.response.error == 'true') {
@@ -63,7 +63,7 @@ class MyOrder extends Component {
               this.props.navigation.navigate("login")
             }
         } else {
-          // console.log('getting reponse here=================',getmyOrdersResponse.response,);  
+          console.log('getting reponse here=================',getmyOrdersResponse.response,);  
           var currentOrderData = getmyOrdersResponse.response.current_orders
           console.log('getting result here for current order --------',currentOrderData);
           var pastOrderData = getmyOrdersResponse.response.past_orders
