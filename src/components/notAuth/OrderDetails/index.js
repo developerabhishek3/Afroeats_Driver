@@ -1,11 +1,11 @@
 import React,{Component,Fragment} from 'react';
-import {View, Text, Image, TouchableOpacity, ScrollView,Modal,Dimensions,BackHandler} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ScrollView,Modal,Dimensions,BackHandler,Linking,Alert} from 'react-native';
 import BottomNavigator from '../../../router/BottomNavigator';
 import Styles from './indexCss';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 import AsyncStorage from '@react-native-community/async-storage';
-import {myorderDetail} from '../../../Api/afterAuth';
+import {myorderDetail,rejectOrderDriver} from '../../../Api/afterAuth';
 import Spinner from 'react-native-loading-spinner-overlay';
 class OrderDetails extends Component {
     constructor(props){
@@ -34,7 +34,10 @@ class OrderDetails extends Component {
       this.setState({Alert_Visibility1: false}); 
       this.props.navigation.navigate("profile")     
     }
-  
+    Hide_Custom_Alert3() {
+      this.setState({Alert_Visibility: false}); 
+      this.rejectOrderFunction()     
+    }
 
 
 
@@ -53,8 +56,7 @@ class OrderDetails extends Component {
       const UserId = JSON.parse(user_id) 
       let orderId = this.props.navigation.getParam("orderId")   
       const myorderDetailResponse = await myorderDetail({order_id:orderId});
-      if (myorderDetailResponse.result == true) {
-      
+      if (myorderDetailResponse.result == true) {      
         if (myorderDetailResponse.response.error == 'true') {
           Alert.alert('Message', myorderDetailResponse.response.errorMessage);
           if(myorderDetailResponse.response.errorMessage == "Token mismatch"){
@@ -65,7 +67,7 @@ class OrderDetails extends Component {
         } else {
           // console.log('getting reponse here=================',myorderDetailResponse.response,);  
           var orderDetails = myorderDetailResponse.response.order_record
-          console.log('getting result here for orderDetails order --------',orderDetails);         
+          // console.log('getting result here for orderDetails order --------',orderDetails);         
           this.setState({orderDetails,isSpinner:false,isBodyLoaded:true})         
         }
       } else {
@@ -75,24 +77,7 @@ class OrderDetails extends Component {
       return;
     };
 
-
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -110,7 +95,50 @@ class OrderDetails extends Component {
     };
 
 
+    rejectOrderFunction(){   
+      
+      this.setState({ isSpinner: true }, async () => {  
 
+        const user_id = await AsyncStorage.getItem('user_id');
+        const UserId = JSON.parse(user_id) 
+        let orderId = this.props.navigation.getParam("orderId") 
+    
+        console.log("inside the funciton order id getting - -  - - - - -",orderId,)  
+        const CancelOrderDetails = await rejectOrderDriver({
+                order_id:orderId, 
+                driver_id:UserId,           
+            });
+        if (CancelOrderDetails.result == true) { 
+          this.setState({
+            isSpinner:false
+          });      
+          if (CancelOrderDetails.response.error == 'true') {
+            Alert.alert('Message', CancelOrderDetails.response.errorMessage);
+            if(CancelOrderDetails.response.errorMessage == "Token mismatch"){
+                Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
+                AsyncStorage.clear()
+                this.props.navigation.navigate("login")
+                this.setState({
+                  isSpinner:false
+                }); 
+              }
+          } else {
+            console.log('getting reponse here=================',CancelOrderDetails.response,);             
+                 this.setState({isSpinner:false})      
+                 this.props.navigation.navigate("home")                 
+          }
+        } else {
+          this.setState({
+            isSpinner:false
+          }); 
+          ALert.alert('Error', postOrderResponse.response.errorMessage);
+          console.log('getting error here-------------');
+        }
+        return;
+
+
+      })
+      };
 
 
 
@@ -140,7 +168,7 @@ class OrderDetails extends Component {
   render() {
 
     const {orderDetails}  = this.state;
-    console.log("getting order details herev- -  -  - -  -",orderDetails)
+    // console.log("getting order details herev- -  -  - -  -",orderDetails)
 
     return (
       <View style={Styles.container}>
@@ -176,6 +204,13 @@ class OrderDetails extends Component {
 
 {
                 orderDetails.map((singleOrderDetails)=>{
+                  let nestedArrayValue
+                  singleOrderDetails.image_record.map((NEstedsingle)=>{
+                    nestedArrayValue = NEstedsingle
+                    // console.log("getting again value  -  - - - - - ",NEstedsingle)
+                  })
+
+
                   return(
                     <View>
                        <View style={Styles.contentView}>
@@ -184,24 +219,24 @@ class OrderDetails extends Component {
                                 
 
 
-            <Image source={require("../../../assets/icons/27.jpg")} style={{alignSelf:"center",width:"90%",height:200,margin:6,borderRadius:3}} />                                    
+            <Image  source={{uri:nestedArrayValue }} style={{alignSelf:"center",width:"90%",height:200,margin:6,borderRadius:3}} />                                    
             {/* <Image source={singleOrderDetails.user_image} style={{alignSelf:"center",width:"90%",height:200,margin:6,borderRadius:3}} />                                     */}
             <View style={{margin:20}}>
-                        <Text style={{color:"#cccccc",fontSize:14,fontFamily:"Ariel",fontWeight:"700"}}>1x SOYA</Text>
-                        <Text style={{color:"#606060",fontSize:12,fontFamily:"Ariel",fontWeight:"700"}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</Text>
+                        <Text style={{color:"#cccccc",fontSize:18,fontFamily:"Ariel",fontWeight:"700"}}>{singleOrderDetails.cat_name}</Text>
+                        <Text style={{color:"#606060",fontSize:14,fontFamily:"Ariel",fontWeight:"700",margin:6}}>{singleOrderDetails.description}</Text>
                     </View>
-                    <View style={{margin:20}}>
+                    {/* <View style={{margin:20}}>
                         <Text style={{color:"#cccccc",fontSize:14,fontFamily:"Ariel",fontWeight:"700"}}>2x SOYA</Text>
                         <Text style={{color:"#606060",fontSize:12,fontFamily:"Ariel",fontWeight:"700"}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</Text>
-                    </View>
+                    </View> */}
 
                     <View style={{flexDirection:"row",margin:20,justifyContent:"space-between"}}>
-                    <Text style={{color:"#cccccc",fontSize:18,fontFamily:"Ariel",fontWeight:"700"}}>TOTAL</Text>
+                    <Text style={{color:"#cccccc",fontSize:16,fontFamily:"Ariel",fontWeight:"700"}}>TOTAL</Text>
                         <Text style={{color:"#cccccc",fontSize:18,fontFamily:"Ariel",fontWeight:"700"}}>{singleOrderDetails.price}€</Text>
                     </View>
 
                     <View style={{margin:20}}>
-                        <Text style={{color:"#cccccc",fontSize:18,fontFamily:"Ariel",fontWeight:"700"}}>Détails de la livraison</Text>                        
+                        <Text style={{color:"#cccccc",fontSize:16,fontFamily:"Ariel",fontWeight:"700"}}>Détails de la livraison</Text>                        
                     </View>
 
 
@@ -212,17 +247,29 @@ class OrderDetails extends Component {
                     </View>
 
                     <Text style={{color:"#e17e2d",fontSize:10,marginTop:20,margin:4,paddingStart:20,fontFamily:"Ariel",fontWeight:"700"}}>Nom d'utilisateur</Text>                        
-                    <View style={{margin:1,flexDirection:"row",marginStart:20,justifyContent:"space-between"}}>
+                    <View style={{margin:1,flexDirection:"row",marginStart:20,justifyContent:"space-between",alignItems:'center'}}>
                         <View style={{flexDirection:"row"}}>
-                          <Image source={require("../../../assets/icons/pic1.png")} style={{height:40,width:40,margin:0,borderRadius:30}} />
+                          <Image source={{ uri : singleOrderDetails.user_image}} style={{height:40,width:40,margin:0,borderRadius:30}} />
                           <View style={{margin:7}}>
-                          <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:1}}>John Smith</Text>                        
-                          <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:1}}>+ 33 090 090 090</Text>                        
+                          <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:1}}>{singleOrderDetails.username} {singleOrderDetails.lastname}</Text>                        
+                          <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:1}}>{singleOrderDetails.user_mobNumber}</Text>                        
                             </View>
                           
                         </View>
-                        <View>
+                        <View style={{flexDirection:"row"}}>
+                          <TouchableOpacity onPress={() =>{this.props.navigation.navigate("chat",{
+                            orderId:singleOrderDetails.order_id,
+                            driver_id:singleOrderDetails.driver_id
+                          })}}>
+                            <Image source={require("../../../assets/icons/chat.png")} style={{height:27,width:27,margin:10}} />
+                        </TouchableOpacity>
+                        <TouchableOpacity                
+                            onPress={()=>{
+                              Linking.openURL(`tel:${singleOrderDetails.user_mobNumber}`)
+                            }}
+                        >
                         <Image source={require("../../../assets/icons/p.png")} style={{height:30,width:30,margin:10}} />
+                        </TouchableOpacity>
                         </View>
                     </View>
 
@@ -331,7 +378,7 @@ class OrderDetails extends Component {
             
             <View style={{flexDirection:"row",justifyContent:"space-around",marginTop:-30}}>
                 <TouchableOpacity
-                  onPress={() => this.Hide_Custom_Alert()}                 
+                  onPress={() => this.Hide_Custom_Alert3()}                 
                   style={Styles.continueBtn}>
                   <Text
                     style={Styles.continueBtnTxt}>
@@ -341,7 +388,7 @@ class OrderDetails extends Component {
 
 
                 <TouchableOpacity
-                  onPress={() => this.Show_Custom_Alert1()}                 
+                  onPress={() => this.Hide_Custom_Alert()}                 
                   style={Styles.continueBtn}>
                   <Text
                     style={Styles.continueBtnTxt}>

@@ -9,15 +9,15 @@ import Geolocation from '@react-native-community/geolocation';
 import {update_driver_lat_long,logout_function} from '../../../Api/afterAuth';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
+import GetLocation from 'react-native-get-location'
 import Spinner from 'react-native-loading-spinner-overlay';
-import moment from 'moment'
 class Home extends Component {
 
     constructor(props){
         super(props)
         this.state={
-            currentLongitude: 'unknown',
-            currentLatitude: 'unknown',
+            currentLongitude: 0,
+            currentLatitude: 0,
             Alert_Visibility: false,
             isBodyLoaded:false,
             isSpinner:false,
@@ -42,96 +42,92 @@ class Home extends Component {
     //     let userId =  await AsyncStorage.getItem('user_id');
     //     console.log("getting on the home userid  :: : : :: :",userId, "token :: ::::::" +token)
     // }
-    async callLocation(that){
-        //alert("callLocation Called");
-          Geolocation.getCurrentPosition(
-            //Will give you the current location
-             (position) => {
-                const currentLongitude = JSON.stringify(position.coords.longitude);
-                //getting the Longitude from the location json
-                const currentLatitude = JSON.stringify(position.coords.latitude);
-                //getting the Latitude from the location json
-                that.setState({ currentLongitude:currentLongitude });
-                //Setting state Longitude to re re-render the Longitude Text
-                that.setState({ currentLatitude:currentLatitude });
-                //Setting state Latitude to re re-render the Longitude Text
+    // async callLocation(that){
+    //     //alert("callLocation Called");
+    //       Geolocation.getCurrentPosition(
+    //         //Will give you the current location
+    //          (position) => {
+    //             const currentLongitude = JSON.stringify(position.coords.longitude);
+    //             //getting the Longitude from the location json
+    //             const currentLatitude = JSON.stringify(position.coords.latitude);
+    //             //getting the Latitude from the location json
+    //             that.setState({ currentLongitude:currentLongitude });
+    //             //Setting state Longitude to re re-render the Longitude Text
+    //             that.setState({ currentLatitude:currentLatitude });
+    //             //Setting state Latitude to re re-render the Longitude Text
                 
-             },
-             (error) => console.log(error.message),
-             { timeout: 200000, maximumAge: 10000 }
-          );
-          that.watchID = Geolocation.watchPosition((position) => {
-            //Will give you the location on location change
-              // console.log(position);
-              const currentLongitude = JSON.stringify(position.coords.longitude);
-              // console.log("inside DID MOUNT : : : : : : ::",currentLongitude)
-              //getting the Longitude from the location json
-              const currentLatitude = JSON.stringify(position.coords.latitude);
-              // console.log("inside DID MOUNT : : : : : : ::",currentLatitude)
-              //getting the Latitude from the location json
-             that.setState({ currentLongitude:currentLongitude });
-             //Setting state Longitude to re re-render the Longitude Text
-             that.setState({ currentLatitude:currentLatitude });
-             //Setting state Latitude to re re-render the Longitude Text
+    //          },
+    //          (error) => console.log(error.message),
+    //          { timeout: 200000, maximumAge: 10000 }
+    //       );
+    //       that.watchID = Geolocation.watchPosition((position) => {
+    //         //Will give you the location on location change
+    //           // console.log(position);
+    //           const currentLongitude = JSON.stringify(position.coords.longitude);
+    //           console.log("inside DID MOUNT : : : : : : ::",currentLongitude)
+    //           //getting the Longitude from the location json
+    //           const currentLatitude = JSON.stringify(position.coords.latitude);
+    //           console.log("inside DID MOUNT : : : : : : ::",currentLatitude)
+    //           //getting the Latitude from the location json
+    //          that.setState({ currentLongitude:currentLongitude });
+    //          //Setting state Longitude to re re-render the Longitude Text
+    //          that.setState({ currentLatitude:currentLatitude });
+    //          //Setting state Latitude to re re-render the Longitude Text
       
       
              
-        //           AsyncStorage.setItem("currentLatitude",JSON.stringify(this.state.currentLatitude));
+    //     //           AsyncStorage.setItem("currentLatitude",JSON.stringify(this.state.currentLatitude));
       
-        //    AsyncStorage.setItem("currentLongitude",JSON.stringify(this.state.currentLongitude));
+    //     //    AsyncStorage.setItem("currentLongitude",JSON.stringify(this.state.currentLongitude));
       
-          //  console.log("getting inside the didmount",this.state.currentLatitude)
+    //       //  console.log("getting inside the didmount",this.state.currentLatitude)
       
       
       
-          });
+    //       });
+    //    }
+
+       getCurrentLocation(){
+        GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 15000,
+      })
+      .then(location => {
+        var currentLatitude = location.latitude
+        var currentLongitude = location.longitude
+          // console.log(location.latitude);
+          // console.log(location.longitude);
+          this.setState({currentLatitude,currentLongitude})
+
+      })
+      .catch(error => {
+          const { code, message } = error;
+          // console.warn(code, message);
+      })
+       }
+
+
+       callFunctionForLocation(){
+         if(this.state.currentLatitude!=0 && this.state.currentLongitude != 0) {
+           this.update_driver_lat_longFunction()
+         }
        }
       
       
       
          
        componentDidMount = async () => {
-        let todayDate = new Date().getTime()
-        let countdown = moment().seconds(45).format("ss")
-        
-        console.log("ggeetifhjfkhjkhkhkjkh  - - - - - - -  - -",countdown ,   todayDate)
-      
-      
 
-  var that =this;
-  //Checking for the permission just after component loaded
-  if(Platform.OS === 'ios'){
-    this.callLocation(that);
-  }else{
-    async function requestLocationPermission() {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,{
-            'title': 'Location Access Required',
-            'message': 'This App needs to Access your location'
-          }
-        )
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          //To Check, If Permission is granted
-          that.callLocation(that);
-        } else {
-          // console.log("Permission Denied");
-        }
-      } catch (err) {
-        console.log("err",err);
-        console.warn(err)
-      }
-    }
-    requestLocationPermission();
-  }    
+          setInterval(() => {
+            this.getCurrentLocation()
+          }, 1000);
 
-        // setInterval(() => {
-          setTimeout(() => {
-            this.update_driver_lat_longFunction()    
-          }, 2000);
-            
-          //  }, 7000);
-
+            setInterval(() => {
+              this.callFunctionForLocation()
+            }, 5000);
+          
+          
+  
 
 
            BackHandler.addEventListener('hardwareBackPress', () =>
@@ -148,8 +144,8 @@ class Home extends Component {
         const UserId = JSON.parse(user_id)    
         const update_driver_lat_longResponse = await update_driver_lat_long({
             driver_id:UserId,
-            latitude:22.753284,
-            longitude:75.893700,
+            latitude:this.state.currentLatitude,
+            longitude:this.state.currentLongitude,
         });
         if (update_driver_lat_longResponse.result == true) {
         //   console.log('getting result here --------',update_driver_lat_longResponse.response,);
@@ -274,10 +270,7 @@ class Home extends Component {
                     <Text style={Styles.headerTxt}>de trajet </Text>
                 </View>
 
-                <TouchableOpacity style={Styles.continueBtn}
-                // onPress={()=>{this.props.navigation.navigate("onlineoffline")}}
-                onPress={()=>{this.props.navigation.navigate("orderrecieved")}}
-                >
+                <TouchableOpacity style={Styles.continueBtn} onPress={()=>{this.props.navigation.navigate("onlineoffline")}}>
                         <Text style={Styles.continueBtnTxt}>Aller en Ligne</Text>
                 </TouchableOpacity>
 
@@ -346,7 +339,8 @@ class Home extends Component {
                         }}>
                       Logout
                       </Text>
-                      </TouchableOpacity>                  
+                      </TouchableOpacity>
+                  
                   </View>
                   </View>
                 </View>

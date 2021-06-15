@@ -11,7 +11,7 @@ class MyProfile extends Component {
         super(props)
         this.state={
             driverProfile:[],
-            
+            Alert_Visibility: false,
             isBodyLoaded: false,
             isSpinner: true,  
   
@@ -20,7 +20,13 @@ class MyProfile extends Component {
 
 
 
-
+    Show_Custom_Alert(visible) {
+      this.setState({Alert_Visibility: visible});
+    }
+    Hide_Custom_Alert() {
+      this.setState({Alert_Visibility: false});
+      // this.props.navigation.navigate("home")
+    }
 
 
     GetdriverProfileFunction = async () => {       
@@ -121,10 +127,25 @@ class MyProfile extends Component {
 
               
                     <View style={{marginTop:-40}}>
+                      {
+                        driverProfile.image != null || driverProfile.image != undefined || driverProfile.image != "" ?
+
+                        <Image source={{
+                          uri: `${driverProfile.image}`,
+                        }} 
+                        
+                         style={{height:80,width:80,alignSelf:"center",borderRadius:50}} />
+                   
+                        :
+
                         <Image
-                            source={require('../../../../assets/icons/13.png')}
-                            style={{height:80,width:80,alignSelf:"center"}}
-                        />
+                        source={require('../../../../assets/icons/13.png')}
+                        style={{height:80,width:80,alignSelf:"center"}}
+                    />
+
+
+                      }
+                       
                     </View>
                     <Text style={{color:"#ce9617",fontSize:15,fontFamily:"Ariel",margin:3,fontWeight:"700",alignSelf:"center"}}>Clark Smith</Text>
 

@@ -8,6 +8,7 @@ import RNFetchBlob from 'rn-fetch-blob'
 import Spinner from 'react-native-loading-spinner-overlay';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
+import {getDriverProfile} from '../../../../Api/afterAuth'
 class EditProfile extends Component {
     constructor(props){
         super(props)
@@ -26,13 +27,15 @@ class EditProfile extends Component {
             isBodyLoaded:false,
             isSpinner:false,
             imgsource:"",
+            driverProfile:[]
         }
     }
 
 
 
 
-    componentDidMount = async () => {        
+    componentDidMount = async () => {   
+      this.GetdriverProfileFunction()     
       BackHandler.addEventListener('hardwareBackPress', () =>
         this.handleBackButton(this.props.navigation),
       );      
@@ -58,6 +61,36 @@ class EditProfile extends Component {
     };
 
 
+
+
+    GetdriverProfileFunction = async () => {       
+      const user_id = await AsyncStorage.getItem('user_id');
+      const UserId = JSON.parse(user_id)    
+      const getDriverProfileResponse = await getDriverProfile({driver_id:UserId});
+      if (getDriverProfileResponse.result == true) {
+        console.log('getting result here --------',getDriverProfileResponse.response,);
+        if (getDriverProfileResponse.response.error == 'true') {
+          Alert.alert('Message', getDriverProfileResponse.response.errorMessage);
+          if(getDriverProfileResponse.response.errorMessage == "Token mismatch"){
+              Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
+              AsyncStorage.clear()
+              this.props.navigation.navigate("login")
+            }
+        } else {
+          console.log('getting reponse here=================',getDriverProfileResponse.response,);  
+          var driverProfile = getDriverProfileResponse.response.usersDetails     
+          this.setState({driverProfile,isBodyLoaded:true,isSpinner:false})         
+        }
+      } else {
+        this.myAlert('Error', getDriverProfileResponse.response.errorMessage);
+        console.log('getting error here-------------');
+      }
+      return;
+    };
+
+
+
+
     uploadWholeData(){
 
 
@@ -68,6 +101,9 @@ class EditProfile extends Component {
           const user_id = await AsyncStorage.getItem('user_id');        
           const TokenValue = JSON.parse(token);
           // const UserId = JSON.parse(user_id);
+          // console.log("USER ID ::::::::"+typeof JSON.stringify(UserId), "USER ID _ _ _ _ __"+ typeof (UserId))
+
+        
 
 
           console.log("getting TOKEN : : : :",TokenValue + "nom_de_famille : : : : ::  : :" +this.state.nom_de_famille+"FILE PATH : :  : : :",this.state.imgsource + "NAME"+this.state.nom)
@@ -77,21 +113,19 @@ class EditProfile extends Component {
           let headers = {
             "Content-Type": "multipart/form-data",
             "user-id":user_id,
-            "token" : TokenValue,
+            "token" : `${TokenValue}`,
             };
           
-            RNFetchBlob.fetch("post",URL,headers,[ 
-              { name: 'driver_id', data: 137},                     
+            RNFetchBlob.fetch("POST",URL,headers,[                                 
               { name: 'first_name', data: this.state.nom },
-              { name: 'last_name', data: this.state.nom_de_famille },          
               { name: 'email', data: this.state.courriel },
+              { name: 'telephone', data: this.state.telephone },               
+              { name: 'last_name', data: this.state.nom_de_famille },                                                   
               { name: 'street_number', data: this.state.n_de_rau },
               { name: 'street', data: this.state.rau },
-              { name: 'postal_code', data: this.state.postcode },
-              { name: 'telephone', data: this.state.telephone },             
-              { name: 'password', data: 123456 },                          
-              
-              { name: 'image', filename: 'photo.jpg', type: 'image/png', data: RNFetchBlob.wrap(this.state.filePath) },               
+              { name: 'postal_code', data: this.state.postcode }, 
+              { name: 'driver_id', data:user_id },                         
+              { name: 'image', filename: 'photo.jpg', type: 'image/png', data: RNFetchBlob.wrap(this.state.imgsource) },               
                
               ]).then((resp) => {  
                 Alert.alert(resp.json().errorMessage)        
@@ -223,6 +257,7 @@ class EditProfile extends Component {
   };
 
     render() {
+      const {driverProfile} = this.state;
         return(
             <View style={Styles.container}>
                 <View style={Styles.headerView}>
@@ -290,7 +325,7 @@ class EditProfile extends Component {
                             placeholder="Nom"
                             placeholderTextColor="#FFFFFF"
                             style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        />
+                        ></TextInput>
                     </View>
 
                     
@@ -301,7 +336,7 @@ class EditProfile extends Component {
                             placeholder="Nom de famille"
                             placeholderTextColor="#FFFFFF"
                             style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        />
+                        ></TextInput>
                     </View>
 
 
@@ -312,7 +347,7 @@ class EditProfile extends Component {
                             placeholder="Courriel"
                             placeholderTextColor="#FFFFFF"
                             style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        />
+                        ></TextInput>
                     </View>
 
 
@@ -324,7 +359,7 @@ class EditProfile extends Component {
                             keyboardType="numeric"
                             placeholderTextColor="#FFFFFF"
                             style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        />
+                        ></TextInput>
                     </View>
 
                     <View>
@@ -334,7 +369,7 @@ class EditProfile extends Component {
                             placeholder="Rue"
                             placeholderTextColor="#FFFFFF"
                             style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        />
+                        ></TextInput>
                     </View>
 
 
@@ -346,7 +381,7 @@ class EditProfile extends Component {
                             keyboardType="numeric"
                             placeholderTextColor="#FFFFFF"
                             style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        />
+                        ></TextInput>
                     </View>
 
                     <View>
@@ -357,7 +392,7 @@ class EditProfile extends Component {
                             keyboardType="numeric"
                             placeholderTextColor="#FFFFFF"
                             style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        />
+                        ></TextInput>
                     </View>
 
 

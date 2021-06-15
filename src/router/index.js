@@ -30,6 +30,9 @@ import MyDocs from '../components/notAuth/ProfileDetails/MyDocs';
 import AddDocs from '../components/auth/AddDocs';
 import OrderRecieved from '../components/OrderRecieved';
 
+import OpenFile from '../components/notAuth/ProfileDetails/MyDocs/OpenFile'
+import ChatScreen from '../components/notAuth/OrderDetails/Chat';
+
 
 const AppNavigator = createStackNavigator(
   {
@@ -110,6 +113,24 @@ const AppNavigator = createStackNavigator(
     },
     mydocs: {
       screen: MyDocs,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    openfile: {
+      screen: OpenFile,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    chat: {
+      screen: ChatScreen,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    orderrecieved:{
+      screen:OrderRecieved,
       navigationOptions: {
         headerShown: false,
       },

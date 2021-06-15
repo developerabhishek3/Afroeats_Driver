@@ -8,6 +8,8 @@ import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {getDriverDocument} from '../../../../Api/afterAuth';
 import AsyncStorage from '@react-native-community/async-storage'
+import Spinner from 'react-native-loading-spinner-overlay';
+import { WebView } from 'react-native-webview';
 class MyDocs extends Component {
   constructor(props){
     super(props)
@@ -22,7 +24,10 @@ class MyDocs extends Component {
         id_proof:"",
         insurance:"",
         rc_card:"",
-        documentRecord:[]
+        documentRecord:[],
+        isBodyLoaded: false,
+        isSpinner: true,  
+
         
     }
 }
@@ -36,46 +41,46 @@ Show_Custom_Alert(visible) {
 
 
 
-chooseFile = () => {
-    var options = {
-      title: 'Choisir une photo',     
-      storageOptions: {
-        skipBackup: false,
-        path: 'images',
-      },
-    };
-    // let options = {
-    //   title: 'Choisir une photo',
-    //   maxWidth: 256,
-    //   maxHeight: 256,
-    //   storageOptions: {
-    //     skipBackup: true
-    //   }
-    // };
-    ImagePicker.showImagePicker(options, response => {
-      // console.log('Response = ', response);
+// chooseFile = () => {
+//     var options = {
+//       title: 'Choisir une photo',     
+//       storageOptions: {
+//         skipBackup: false,
+//         path: 'images',
+//       },
+//     };
+//     // let options = {
+//     //   title: 'Choisir une photo',
+//     //   maxWidth: 256,
+//     //   maxHeight: 256,
+//     //   storageOptions: {
+//     //     skipBackup: true
+//     //   }
+//     // };
+//     ImagePicker.showImagePicker(options, response => {
+//       // console.log('Response = ', response);
 
-      if (response.didCancel) {
-        // console.log('User cancelled image picker');
-      } else if (response.error) {
-        // console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        // console.log('User tapped custom button: ', response.customButton);
-        alert(response.customButton);
-      } else {
-        let source = response.data;
-        let path = response.uri
-        // console.log("Getting source response here"+source)
-        setTimeout(() => {
-            this.setState({
-                filePath: source,
-                path:path                
-              });
-        }, 1000);
+//       if (response.didCancel) {
+//         // console.log('User cancelled image picker');
+//       } else if (response.error) {
+//         // console.log('ImagePicker Error: ', response.error);
+//       } else if (response.customButton) {
+//         // console.log('User tapped custom button: ', response.customButton);
+//         alert(response.customButton);
+//       } else {
+//         let source = response.data;
+//         let path = response.uri
+//         // console.log("Getting source response here"+source)
+//         setTimeout(() => {
+//             this.setState({
+//                 filePath: source,
+//                 path:path                
+//               });
+//         }, 1000);
        
-      }
-    });
-  };
+//       }
+//     });
+//   };
 
 
   getDriverDocumentFunction = async () => {       
@@ -108,7 +113,7 @@ chooseFile = () => {
             address_proof = singleDocument.address_proof
           })               
         
-        this.setState({documentRecord,driving_license,id_proof,rc_card,insurance,address_proof})         
+        this.setState({documentRecord,driving_license,id_proof,rc_card,insurance,address_proof,isBodyLoaded:true,isSpinner:false})         
       }
     } else {
       this.myAlert('Error', getDriverDocumentResponse.response.errorMessage);
@@ -120,118 +125,118 @@ chooseFile = () => {
 
 
 
-  Document_Picker = async (data) => {
-    console.log("upload_data", data)
-    try {
-        const res = await DocumentPicker.pick({
-            type: [DocumentPicker.types.images],
-        });
-        console.log(
-            "url", res.uri,
-            "type", res.type, // mime type
-            "name", res.name,
-            "size", res.size
-        );
-        if (data == "document1") {
-            this.setState({
-                document1: RNFetchBlob.wrap(res.uri),
-                document_name1: res.name
-            })
-        }
-        else if (data == "document2") {
-            this.setState({
-                document2: RNFetchBlob.wrap(res.uri),
-                document_name2: res.name
-            })
-        }
-        else if (data == "document3") {
-            this.setState({
-                document3: RNFetchBlob.wrap(res.uri),
-                document_name3: res.name
-            })
-        }
-        else if (data == "document4") {
-            this.setState({
-                document4: RNFetchBlob.wrap(res.uri),
-                document_name4: res.name
-            })
-        }
-        else if (data == "document5") {
-            this.setState({
-                document5: RNFetchBlob.wrap(res.uri),
-                document_name5: res.name
-            })
-        }
-        else if (data == "document6") {
-            this.setState({
-                document6: RNFetchBlob.wrap(res.uri),
-                document_name6: res.name
-            })
-        }
-    } catch (err) {
-        if (DocumentPicker.isCancel(err)) {
-            // User cancelled the picker, exit any dialogs or menus and move on
-        } else {
-            throw err;
-        }
-    }
-}
+//   Document_Picker = async (data) => {
+//     console.log("upload_data", data)
+//     try {
+//         const res = await DocumentPicker.pick({
+//             type: [DocumentPicker.types.images],
+//         });
+//         console.log(
+//             "url", res.uri,
+//             "type", res.type, // mime type
+//             "name", res.name,
+//             "size", res.size
+//         );
+//         if (data == "document1") {
+//             this.setState({
+//                 document1: RNFetchBlob.wrap(res.uri),
+//                 document_name1: res.name
+//             })
+//         }
+//         else if (data == "document2") {
+//             this.setState({
+//                 document2: RNFetchBlob.wrap(res.uri),
+//                 document_name2: res.name
+//             })
+//         }
+//         else if (data == "document3") {
+//             this.setState({
+//                 document3: RNFetchBlob.wrap(res.uri),
+//                 document_name3: res.name
+//             })
+//         }
+//         else if (data == "document4") {
+//             this.setState({
+//                 document4: RNFetchBlob.wrap(res.uri),
+//                 document_name4: res.name
+//             })
+//         }
+//         else if (data == "document5") {
+//             this.setState({
+//                 document5: RNFetchBlob.wrap(res.uri),
+//                 document_name5: res.name
+//             })
+//         }
+//         else if (data == "document6") {
+//             this.setState({
+//                 document6: RNFetchBlob.wrap(res.uri),
+//                 document_name6: res.name
+//             })
+//         }
+//     } catch (err) {
+//         if (DocumentPicker.isCancel(err)) {
+//             // User cancelled the picker, exit any dialogs or menus and move on
+//         } else {
+//             throw err;
+//         }
+//     }
+// }
 
 
 
 
 
-upload_document = async () => {
+// upload_document = async () => {
    
 
 
-    const token = await AsyncStorage.getItem('token');
-    const user_id = await AsyncStorage.getItem('user_id'); 
-    console.log("@!ST CONSOLE : : :  : : : : :",typeof token +"USER ID TYPE :  : : :",typeof user_id)       
-    const TokenValue = JSON.parse(token);
-    // const UserId = JSON.parse(user_id);
+//     const token = await AsyncStorage.getItem('token');
+//     const user_id = await AsyncStorage.getItem('user_id'); 
+//     console.log("@!ST CONSOLE : : :  : : : : :",typeof token +"USER ID TYPE :  : : :",typeof user_id)       
+//     const TokenValue = JSON.parse(token);
+//     // const UserId = JSON.parse(user_id);
 
-    console.log("getting USET+RID ::::"+ user_id + "@ND :::::::"+ token+"@3rd ::::::::" + this.state.document_name3)
-    console.log("@ND CONSOLE : : :  : : : : :",typeof token +"USER ID TYPE :  : : :"+user_id )
+//     console.log("getting USET+RID ::::"+ user_id + "@ND :::::::"+ token+"@3rd ::::::::" + this.state.document_name3)
+//     console.log("@ND CONSOLE : : :  : : : : :",typeof token +"USER ID TYPE :  : : :"+user_id )
 
 
 
     
-    this.setState({isLoading:true})
-    let headers = {
-      "Content-Type": "multipart/form-data",
-      "user-id":user_id,
-      "token" : TokenValue,
+//     this.setState({isLoading:true})
+//     let headers = {
+//       "Content-Type": "multipart/form-data",
+//       "user-id":user_id,
+//       "token" : TokenValue,
 
-  };
-     RNFetchBlob.fetch('POST', 'https://food.afroeats.fr/api/uploadDriverDocument',   headers ,  [
-      { name: 'id_proof', filename: 'photo.jpg', type: 'image/png', data: this.state.document2 },
-      { name: 'address_proof', filename: 'photo.jpg', type: 'image/png', data: this.state.document3  },
-      { name: 'driving_license', filename: 'photo.jpg', type: 'image/png', data: this.state.document4 },
-      { name: 'insurance', filename: 'photo.jpg', type: 'image/png', data: this.state.document5 },
-      { name: 'rc_card', filename: 'photo.jpg', type: 'image/png', data: this.state.document6 },
-      { name: 'driver_id',  data:user_id }
+//   };
+//      RNFetchBlob.fetch('POST', 'https://food.afroeats.fr/api/uploadDriverDocument',   headers ,  [
+//       { name: 'id_proof', filename: 'photo.jpg', type: 'image/png', data: this.state.document2 },
+//       { name: 'address_proof', filename: 'photo.jpg', type: 'image/png', data: this.state.document3  },
+//       { name: 'driving_license', filename: 'photo.jpg', type: 'image/png', data: this.state.document4 },
+//       { name: 'insurance', filename: 'photo.jpg', type: 'image/png', data: this.state.document5 },
+//       { name: 'rc_card', filename: 'photo.jpg', type: 'image/png', data: this.state.document6 },
+//       { name: 'driver_id',  data:user_id }
      
-      ],
-     ).then((resp) => {
-      console.log("response:::::::" + JSON.stringify(resp.json()));
-      console.log("response:::::::" + resp.json().document_status);
-      if(resp.json().error == "false"){
-       console.log("sucesss")
-        this.setState({isLoading:false})
+//       ],
+//      ).then((resp) => {
+//       console.log("response:::::::" + JSON.stringify(resp.json()));
+//       console.log("response:::::::" + resp.json().document_status);
+//       if(resp.json().error == "false"){
+//        console.log("sucesss")
+//         this.setState({isLoading:false})
         
-      }
-      else {
-        console.log("unsucesss")
-        Alert.alert("Message",resp.errorMessage)
-        this.setState({isLoading:false})
-      }
-      // console.log("resp:::::::::::::",resp)
-     }).catch((err) => {
-      console.log("response::::err:::" + err);
+//       }
+//       else {
+//         console.log("unsucesss")
+//         Alert.alert("Message",resp.errorMessage)
+//         this.setState({isLoading:false})
+//       }
+//       // console.log("resp:::::::::::::",resp)
+//      }).catch((err) => {
+//       console.log("response::::err:::" + err);
      
-      });
-}
+//       });
+// }
 
 
 
@@ -268,8 +273,8 @@ upload_document = async () => {
       };
 
     render() {
-      const { id_proof,address_proof} = this.state;
-      console.log("inside render - - -  - -",id_proof,address_proof)
+      const { id_proof,address_proof,driving_license} = this.state;
+      console.log("inside render - - -  - -",id_proof,address_proof,driving_license)
     
         return(
             <View style={Styles.container}>
@@ -284,14 +289,20 @@ upload_document = async () => {
                         <Text style={Styles.headerTxt}>Mes documents</Text>
                     </View>
                 </View>
+                <Spinner visible={this.state.isSpinner} />
                 <ScrollView>
-
+                {
+                  this.state.isBodyLoaded == true ?
+                  <Fragment>
+             
 
                     <View style={{margin:4,marginTop:7}}>
                     <Text style={{color:"#f7f7f7",fontSize:13,margin:6,fontFamily:"Arial",fontWeight:'800',marginStart:24}}>Preuve d'identité</Text>
                     <View style={{alignSelf:"center",flexDirection:"row",alignItems:'center',justifyContent:"space-between",height:45,width:"86%",backgroundColor:"#000000",borderWidth:0,borderColor:"red",borderTopLeftRadius:6,borderBottomLeftRadius:6}}>
                         <Text numberOfLines={2} style={{marginStart:7,color:"#f7f7f7",fontSize:10,fontWeight:"600",fontFamily:"Arial",width:"60%"}} >{this.state.id_proof}</Text>
-                        <TouchableOpacity onPress={() => this.Document_Picker("document1")} style={Styles.continueBtn1}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
+                          document:this.state.id_proof
+                        })} style={Styles.continueBtn1}>
                             <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
                         </TouchableOpacity>
                     </View>
@@ -302,7 +313,9 @@ upload_document = async () => {
                     <Text style={{color:"#f7f7f7",fontSize:13,margin:6,fontFamily:"Arial",fontWeight:'800',marginStart:24}}>Preuve d'adresse</Text>
                     <View style={{alignSelf:"center",flexDirection:"row",alignItems:'center',justifyContent:"space-between",height:45,width:"86%",backgroundColor:"#000000",borderWidth:0,borderColor:"red",borderTopLeftRadius:6,borderBottomLeftRadius:6}}>
                         <Text numberOfLines={2} style={{marginStart:7,color:"#f7f7f7",fontSize:10,fontWeight:"600",fontFamily:"Arial",width:"60%"}} >{this.state.address_proof}</Text>
-                        <TouchableOpacity  onPress={() => this.Document_Picker("document2")} style={Styles.continueBtn1}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
+                          document:this.state.address_proof
+                        })} style={Styles.continueBtn1}>
                             <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
                         </TouchableOpacity>
                     </View>
@@ -315,7 +328,9 @@ upload_document = async () => {
                     <Text style={{color:"#f7f7f7",fontSize:13,margin:6,fontFamily:"Arial",fontWeight:'800',marginStart:24}}>Licence de conducteur</Text>
                     <View style={{alignSelf:"center",flexDirection:"row",alignItems:'center',justifyContent:"space-between",height:45,width:"86%",backgroundColor:"#000000",borderWidth:0,borderColor:"red",borderTopLeftRadius:6,borderBottomLeftRadius:6}}>
                         <Text numberOfLines={2} style={{marginStart:7,color:"#f7f7f7",fontSize:10,fontWeight:"600",fontFamily:"Arial",width:"60%"}} >{this.state.driving_license}</Text>
-                        <TouchableOpacity onPress={() => this.Document_Picker("document3")} style={Styles.continueBtn1}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
+                          document:this.state.driving_license
+                        })} style={Styles.continueBtn1}>
                             <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
                         </TouchableOpacity>
                     </View>
@@ -328,7 +343,9 @@ upload_document = async () => {
                     <Text style={{color:"#f7f7f7",fontSize:13,margin:6,fontFamily:"Arial",fontWeight:'800',marginStart:24}}>Assurance des véhicules</Text>
                     <View style={{alignSelf:"center",flexDirection:"row",alignItems:'center',justifyContent:"space-between",height:45,width:"86%",backgroundColor:"#000000",borderWidth:0,borderColor:"red",borderTopLeftRadius:6,borderBottomLeftRadius:6}}>
                         <Text numberOfLines={2} style={{marginStart:7,color:"#f7f7f7",fontSize:10,fontWeight:"600",fontFamily:"Arial",width:"60%"}} >{this.state.insurance}</Text>
-                        <TouchableOpacity onPress={() => this.Document_Picker("document4")} style={Styles.continueBtn1}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
+                          document:this.state.insurance
+                        })} style={Styles.continueBtn1}>
                             <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
                         </TouchableOpacity>
                     </View>
@@ -341,7 +358,9 @@ upload_document = async () => {
                     <Text style={{color:"#f7f7f7",fontSize:13,margin:6,fontFamily:"Arial",fontWeight:'800',marginStart:24}}>Enregistrement des véhicules</Text>
                     <View style={{alignSelf:"center",flexDirection:"row",alignItems:'center',justifyContent:"space-between",height:45,width:"86%",backgroundColor:"#000000",borderWidth:0,borderColor:"red",borderTopLeftRadius:6,borderBottomLeftRadius:6}}>
                         <Text numberOfLines={2} style={{marginStart:7,color:"#f7f7f7",fontSize:10,fontWeight:"600",fontFamily:"Arial",width:"60%"}} >{this.state.rc_card}</Text>
-                        <TouchableOpacity onPress={() => this.Document_Picker("document5")} style={Styles.continueBtn1}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
+                          document:this.state.rc_card
+                        })} style={Styles.continueBtn1}>
                             <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
                         </TouchableOpacity>
                     </View>
@@ -349,7 +368,7 @@ upload_document = async () => {
 
 
 
-
+{/* 
                     <View style={{width:"86%",alignItems:"center",backgroundColor:"#404040",borderWidth:1,alignSelf:"center",margin:15,borderColor:"#a9a6a6",borderRadius:7,flexDirection:"row",justifyContent:"space-between"}}>
                         <Text style={{color:"#f7f7f7",fontFamily:"Arial",width:"60%",margin:10,fontSize:12,fontWeight:"700"}}>Choisissez le mode de livraison que vous souhaitez </Text>
                         <TouchableOpacity style={{flexDirection:"row",margin:1,marginRight:10}}>
@@ -358,14 +377,22 @@ upload_document = async () => {
                                 textStyle={{ color:"#f8892d",marginTop:6,fontWeight:"700"}} />                                       
                                 <Image source={require("../../../../assets/icons/2-1.png")} style={{height:10,width:10,marginTop:10,margin:3}} />
                        </TouchableOpacity>
-                    </View>
+                    </View> */}
 
 
                     
                     
-                    <TouchableOpacity onPress={()=>{this.props.navigation.navigate("profile")}} style={Styles.continueBtn}>
+                    {/* <TouchableOpacity onPress={()=>{this.props.navigation.navigate("profile")}} style={Styles.continueBtn}>
                             <Text style={Styles.continueBtnTxt}>Enregister</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+
+                  </Fragment>
+                     :
+                     <View>
+                       <Text></Text>
+                     </View>
+                   }
+   
 
                 </ScrollView>
 

@@ -1,5 +1,5 @@
 import React, {Component,Fragment} from 'react';
-import {View,Text,Image,TouchableOpacity, ScrollView,TextInput,Switch,Modal,TouchableHighlight,Dimensions} from 'react-native';
+import {View,Text,Image,TouchableOpacity, ScrollView,TextInput,Switch,Modal,TouchableHighlight,Dimensions,BackHandler} from 'react-native';
 // import BottomNavigator from '../../../router/BottomNavigator'
 import Styles from './indexCss';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -197,6 +197,32 @@ class AddDocs extends Component {
          
           });
     }
+
+    componentDidMount = async () => {      
+    
+        BackHandler.addEventListener('hardwareBackPress', () =>
+          this.handleBackButton(this.props.navigation),
+        );      
+      };
+
+
+      componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', () =>
+          this.handleBackButton(this.props.navigation),
+        );
+      }
+    
+      handleBackButton = (nav) => {
+        if (!nav.isFocused()) {
+          BackHandler.removeEventListener('hardwareBackPress', () =>
+            this.handleBackButton(this.props.navigation),
+          );
+          return false;
+        } else {
+          nav.goBack();
+          return true;
+        }
+      };
 
 
 
