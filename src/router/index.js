@@ -32,7 +32,7 @@ import OrderRecieved from '../components/OrderRecieved';
 
 import OpenFile from '../components/notAuth/ProfileDetails/MyDocs/OpenFile'
 import ChatScreen from '../components/notAuth/OrderDetails/Chat';
-
+import TrackOrder from '../components/notAuth/OrderDetails/TrackOrder'
 
 const AppNavigator = createStackNavigator(
   {
@@ -44,6 +44,12 @@ const AppNavigator = createStackNavigator(
     },
     orderrecieved:{
       screen:OrderRecieved,
+      navigationOptions: {
+        headerShown: false,
+      },
+    },
+    trackorder:{
+      screen:TrackOrder,
       navigationOptions: {
         headerShown: false,
       },

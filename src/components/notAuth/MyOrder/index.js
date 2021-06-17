@@ -47,7 +47,7 @@ class MyOrder extends Component {
 
 
 
-
+    
 
     getmyOrdersFunction = async () => {       
       const user_id = await AsyncStorage.getItem('user_id');
@@ -56,19 +56,21 @@ class MyOrder extends Component {
       if (getmyOrdersResponse.result == true) {
       
         if (getmyOrdersResponse.response.error == 'true') {
+          // console.log("getting here - i am abhishek - - -")
+          this.setState({isBodyLoaded:true,isSpinner:false})         
           Alert.alert('Message', getmyOrdersResponse.response.errorMessage);
-          if(getmyOrdersResponse.response.errorMessage == "Token mismatch"){
+          if(getmyOrdersResponse.response.errorMessage == "Incompatibilité de jetons"){
               Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
               AsyncStorage.clear()
               this.props.navigation.navigate("login")
             }
         } else {
-          console.log('getting reponse here=================',getmyOrdersResponse.response,);  
+          // console.log('getting reponse here=================',getmyOrdersResponse.response,);  
           var currentOrderData = getmyOrdersResponse.response.current_orders
-          console.log('getting result here for current order --------',currentOrderData);
+          // console.log('getting result here for current order --------',currentOrderData);
           var pastOrderData = getmyOrdersResponse.response.past_orders
           var Images =  getmyOrdersResponse.response.past_orders.image_record
-          console.log("GEtting images  - - -",Images)
+          // console.log("GEtting images  - - -",Images)
           // console.log('getting result here for past order --------',currentOrderData); 
           this.setState({currentOrderData,pastOrderData,isBodyLoaded:true,isSpinner:false})         
         }

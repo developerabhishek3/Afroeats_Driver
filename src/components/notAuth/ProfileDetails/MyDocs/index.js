@@ -91,7 +91,7 @@ Show_Custom_Alert(visible) {
       console.log('getting result here for driver documents --------',getDriverDocumentResponse.response,);
       if (getDriverDocumentResponse.response.error == 'true') {
         Alert.alert('Message', getDriverDocumentResponse.response.errorMessage);
-        if(getDriverDocumentResponse.response.errorMessage == "Token mismatch"){
+        if(getDriverDocumentResponse.response.errorMessage == "Incompatibilité de jetons"){
             Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
             AsyncStorage.clear()
             this.props.navigation.navigate("login")
