@@ -7,17 +7,28 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 import AsyncStorage from '@react-native-community/async-storage';
 import {myorderDetail,rejectOrderDriver} from '../../../Api/afterAuth';
 import Spinner from 'react-native-loading-spinner-overlay';
+import GetLocation from 'react-native-get-location';
 class OrderDetails extends Component {
     constructor(props){
         super(props)
-        this.state={
-          Model_Visibility: false,
-          Alert_Visibility: false,
-          Model_Visibility1: false,
+        this.state={      
+          Alert_Visibility: false,        
           Alert_Visibility1: false,
           orderDetails:[],
           isBodyLoaded: false,
           isSpinner: true,  
+          currentLatitude:0,
+          currentLongitude:0,
+          delivery_address:"",
+          user_image:"",
+          user_mobNumber:"",
+          username:"",
+          lastname:"",
+          delivery_latitude:"",
+          delivery_longitude:"",
+          latitude:"",
+          longitude:""
+
         }
     }
     Show_Custom_Alert(visible) {
@@ -59,7 +70,7 @@ class OrderDetails extends Component {
       if (myorderDetailResponse.result == true) {      
         if (myorderDetailResponse.response.error == 'true') {
           Alert.alert('Message', myorderDetailResponse.response.errorMessage);
-          if(myorderDetailResponse.response.errorMessage == "Token mismatch"){
+          if(myorderDetailResponse.response.errorMessage == "Incompatibilité de jetons"){
               Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
               AsyncStorage.clear()
               this.props.navigation.navigate("login")
@@ -67,8 +78,31 @@ class OrderDetails extends Component {
         } else {
           // console.log('getting reponse here=================',myorderDetailResponse.response,);  
           var orderDetails = myorderDetailResponse.response.order_record
+          let delivery_address;
+          let user_image;
+          let user_mobNumber;
+          let username;
+          let lastname;
+          let delivery_latitude;
+          let delivery_longitude;
+          let latitude;
+          let longitude;
+
+          orderDetails.map((singleOrder)=>{
+            console.log("getting order details inside map =  - - - -",singleOrder)
+            delivery_address = singleOrder.delivery_address
+            user_image = singleOrder.user_image
+            user_mobNumber = singleOrder.user_mobNumber  
+            username = singleOrder.username   
+            lastname = singleOrder.lastname  
+            delivery_latitude = singleOrder.delivery_latitude   
+            delivery_longitude = singleOrder.delivery_longitude  
+            latitude = singleOrder.latitude 
+            longitude = singleOrder.longitude 
+          })
           // console.log('getting result here for orderDetails order --------',orderDetails);         
-          this.setState({orderDetails,isSpinner:false,isBodyLoaded:true})         
+          this.setState({orderDetails,isSpinner:false,isBodyLoaded:true,delivery_address,
+            longitude,latitude,delivery_longitude,delivery_latitude,lastname,user_image,user_mobNumber,username})         
         }
       } else {
         this.myAlert('Error', myorderDetailResponse.response.errorMessage);
@@ -86,6 +120,10 @@ class OrderDetails extends Component {
     
       setTimeout(() => {
           this.myorderDetailFunction()
+          
+      }, 1000);
+      setInterval(() => {
+        this.getCurrentLocation()
       }, 1000);
 
 
@@ -114,7 +152,7 @@ class OrderDetails extends Component {
           });      
           if (CancelOrderDetails.response.error == 'true') {
             Alert.alert('Message', CancelOrderDetails.response.errorMessage);
-            if(CancelOrderDetails.response.errorMessage == "Token mismatch"){
+            if(CancelOrderDetails.response.errorMessage == "Incompatibilité de jetons"){
                 Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
                 AsyncStorage.clear()
                 this.props.navigation.navigate("login")
@@ -123,7 +161,7 @@ class OrderDetails extends Component {
                 }); 
               }
           } else {
-            console.log('getting reponse here=================',CancelOrderDetails.response,);             
+            // console.log('getting reponse here=================',CancelOrderDetails.response,);             
                  this.setState({isSpinner:false})      
                  this.props.navigation.navigate("home")                 
           }
@@ -140,7 +178,24 @@ class OrderDetails extends Component {
       })
       };
 
-
+      getCurrentLocation(){
+        GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 15000,
+      })
+      .then(location => {
+        // var currentLatitude =
+        // var currentLongitude = 
+          // console.log("LAT : :  : : : : : :"+location.latitude);
+          // console.log("LONG : : : :::: : : :  : :"+location.longitude);
+          this.setState({currentLatitude: location.latitude,currentLongitude:location.longitude})
+    
+      })
+      .catch(error => {
+          const { code, message } = error;
+          // console.warn(code, message);
+      })
+       }
 
 
 
@@ -166,9 +221,9 @@ class OrderDetails extends Component {
     };
 
   render() {
-
-    const {orderDetails}  = this.state;
-    // console.log("getting order details herev- -  -  - -  -",orderDetails)
+    let orderId = this.props.navigation.getParam("orderId") 
+    const {orderDetails,currentLatitude,currentLongitude}  = this.state;
+    console.log("getting order details herev- -  -  - -  -",orderId)
 
     return (
       <View style={Styles.container}>
@@ -198,6 +253,10 @@ class OrderDetails extends Component {
             this.state.isBodyLoaded == true ?
 
             <Fragment>
+
+
+
+              <View>
 
 
 
@@ -235,49 +294,7 @@ class OrderDetails extends Component {
                         <Text style={{color:"#cccccc",fontSize:18,fontFamily:"Ariel",fontWeight:"700"}}>{singleOrderDetails.price}€</Text>
                     </View>
 
-                    <View style={{margin:20}}>
-                        <Text style={{color:"#cccccc",fontSize:16,fontFamily:"Ariel",fontWeight:"700"}}>Détails de la livraison</Text>                        
-                    </View>
-
-
-                    <Text style={{color:"#e17e2d",fontSize:10,paddingStart:20,margin:4,fontFamily:"Ariel",fontWeight:"700"}}>Adresse de livraison</Text>                        
-                    <View style={{margin:0,flexDirection:"row",marginStart:20}}>
-                        <Image source={require("../../../assets/icons/address1.png")} style={{height:16,width:16,margin:3}} />
-                        <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:4,width:SCREEN_WIDTH*0.85}}>{singleOrderDetails.delivery_address}</Text>                        
-                    </View>
-
-                    <Text style={{color:"#e17e2d",fontSize:10,marginTop:20,margin:4,paddingStart:20,fontFamily:"Ariel",fontWeight:"700"}}>Nom d'utilisateur</Text>                        
-                    <View style={{margin:1,flexDirection:"row",marginStart:20,justifyContent:"space-between",alignItems:'center'}}>
-                        <View style={{flexDirection:"row"}}>
-                          <Image source={{ uri : singleOrderDetails.user_image}} style={{height:40,width:40,margin:0,borderRadius:30}} />
-                          <View style={{margin:7}}>
-                          <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:1}}>{singleOrderDetails.username} {singleOrderDetails.lastname}</Text>                        
-                          <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:1}}>{singleOrderDetails.user_mobNumber}</Text>                        
-                            </View>
-                          
-                        </View>
-                        <View style={{flexDirection:"row"}}>
-                          <TouchableOpacity onPress={() =>{this.props.navigation.navigate("chat",{
-                            orderId:singleOrderDetails.order_id,
-                            driver_id:singleOrderDetails.driver_id
-                          })}}>
-                            <Image source={require("../../../assets/icons/chat.png")} style={{height:27,width:27,margin:10}} />
-                        </TouchableOpacity>
-                        <TouchableOpacity                
-                            onPress={()=>{
-                              Linking.openURL(`tel:${singleOrderDetails.user_mobNumber}`)
-                            }}
-                        >
-                        <Image source={require("../../../assets/icons/p.png")} style={{height:30,width:30,margin:10}} />
-                        </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <TouchableOpacity onPress={()=>{this.Show_Custom_Alert()}} style={Styles.continueBtn}>
-                      <Text style={Styles.continueBtnTxt}>Annuler</Text>
-                    </TouchableOpacity>
-          
-
+                   
 
 
 
@@ -289,6 +306,63 @@ class OrderDetails extends Component {
               }
 
 
+
+
+
+              </View>
+
+
+              <View style={{margin:20}}>
+                        <Text style={{color:"#cccccc",fontSize:16,fontFamily:"Ariel",fontWeight:"700"}}>Détails de la livraison</Text>                        
+                    </View>
+
+
+                    <Text style={{color:"#e17e2d",fontSize:10,paddingStart:20,margin:4,fontFamily:"Ariel",fontWeight:"700"}}>Adresse de livraison</Text>                        
+                    <TouchableOpacity onPress={()=>{this.props.navigation.navigate("trackorder",{
+                      delivery_address:this.state.delivery_address,
+                      orderId:orderId,
+                      delivery_latitude:JSON.parse(this.state.delivery_latitude),
+                      delivery_longitude:JSON.parse(this.state.delivery_longitude),
+                      // lat:currentLatitude,
+                      // long:currentLongitude
+                      lat:JSON.parse(this.state.latitude),
+                      long:JSON.parse(this.state.longitude)
+                    })}} style={{margin:0,flexDirection:"row",marginStart:20}}>
+                        <Image source={require("../../../assets/icons/address1.png")} style={{height:16,width:16,margin:3}} />
+                        <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:4,width:SCREEN_WIDTH*0.85}}>{this.state.delivery_address}</Text>                        
+                    </TouchableOpacity>
+
+                    <Text style={{color:"#e17e2d",fontSize:10,marginTop:20,margin:4,paddingStart:20,fontFamily:"Ariel",fontWeight:"700"}}>Nom d'utilisateur</Text>                        
+                    <View style={{margin:1,flexDirection:"row",marginStart:20,justifyContent:"space-between",alignItems:'center'}}>
+                        <View style={{flexDirection:"row"}}>
+                          <Image source={{ uri : this.state.user_image}} style={{height:40,width:40,margin:0,borderRadius:30}} />
+                          <View style={{margin:7}}>
+                          <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:1}}>{this.state.username} {this.state.lastname}</Text>                        
+                          <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:1}}>{this.state.user_mobNumber}</Text>                        
+                            </View>
+                          
+                        </View>
+                        <View style={{flexDirection:"row"}}>
+                          <TouchableOpacity onPress={() =>{this.props.navigation.navigate("chat",{
+                            orderId:orderId,
+                            // driver_id:singleOrderDetails.driver_id
+                          })}}>
+                            <Image source={require("../../../assets/icons/chat.png")} style={{height:27,width:27,margin:10}} />
+                        </TouchableOpacity>
+                        <TouchableOpacity                
+                            onPress={()=>{
+                              Linking.openURL(`tel:${this.state.user_mobNumber}`)
+                            }}
+                        >
+                        <Image source={require("../../../assets/icons/p.png")} style={{height:30,width:30,margin:10}} />
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <TouchableOpacity onPress={()=>{this.Show_Custom_Alert()}} style={Styles.continueBtn}>
+                      <Text style={Styles.continueBtnTxt}>Annuler</Text>
+                    </TouchableOpacity>
+          
 
 
 

@@ -17,16 +17,13 @@ class AddDocs extends Component {
             isEnabled:false,
             filePath:"",
             path:"",
+            document2:"",
+            document3:"",
+            document4:"",
+            document5:"",
+            document6:"",
             Model_Visibility: false,
-            Alert_Visibility: false,
-            documentData : {
-                document_name1:"",
-                document_name2:"",
-                document_name3:"",
-                document_name4:"",
-                document_name5:"",
-                document_name6:"",
-            }
+            Alert_Visibility: false,           
             
         }
     }
@@ -182,6 +179,7 @@ class AddDocs extends Component {
           console.log("response:::::::" + JSON.stringify(resp.json()));
           console.log("response:::::::" + resp.json().document_status);
           if(resp.json().error == "false"){
+            this.props.navigation.navigate("home")
            console.log("sucesss")
             this.setState({isLoading:false})
             
@@ -197,6 +195,43 @@ class AddDocs extends Component {
          
           });
     }
+
+
+
+
+    validateUser = (data) => {  
+        console.log("Getting state value here - -  - - -",data)
+        const {      
+            document_name2,
+            document_name3,
+            document_name4,
+            document_name5,
+            document_name6,          
+        } = this.state;
+         if (document_name2 != undefined || document_name2 != null || document_name2 != "") {              
+          Alert.alert('Message', `Veuillez télécharger votre Preuve d'identité`);
+        } else if (document_name3 != undefined || document_name3 != null || document_name3 != "") { 
+          Alert.alert("Message",`Veuillez télécharger votre Preuve d'adresse`)
+        }
+        else if (document_name4 != undefined || document_name4 != null || document_name4 != "") { 
+            Alert.alert("Message",`Veuillez télécharger votre Licence de conducteur`)
+          }        
+          else if (document_name5 != undefined || document_name5 != null || document_name5 != "") { 
+         Alert.alert("Message",`Veuillez télécharger votre Assurance des véhicules`)
+        }
+        else if (document_name6 != undefined || document_name6 != null || document_name6 != "") {           
+          Alert.alert("Message",`Veuillez télécharger votre Enregistrement des véhicules`)
+        }         
+        else {                  
+          this.upload_document();
+        }
+      };
+    
+
+
+
+
+
 
     componentDidMount = async () => {      
     

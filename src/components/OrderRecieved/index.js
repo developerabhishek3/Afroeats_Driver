@@ -90,7 +90,7 @@ export default class index extends Component {
       // console.log('getting result here --------',getmyOrdersRealTimeResponse.response,);
       if (getmyOrdersRealTimeResponse.response.error == 'true') {
         Alert.alert('Message', getmyOrdersRealTimeResponse.response.errorMessage);
-        if(getmyOrdersRealTimeResponse.response.errorMessage == "Token mismatch"){
+        if(getmyOrdersRealTimeResponse.response.errorMessage == "Incompatibilité de jetons"){
             Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
             AsyncStorage.clear()
             this.props.navigation.navigate("login")
@@ -128,7 +128,7 @@ export default class index extends Component {
         // console.log('getting result here --------',rejectOrderResponse.response,);
         if (rejectOrderResponse.response.error == 'true') {
           Alert.alert('Message', rejectOrderResponse.response.errorMessage);
-          if(rejectOrderResponse.response.errorMessage == "Token mismatch"){
+          if(rejectOrderResponse.response.errorMessage == "Incompatibilité de jetons"){
               Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
               AsyncStorage.clear()
               this.props.navigation.navigate("login")
@@ -167,7 +167,7 @@ export default class index extends Component {
         // console.log('getting result here --------',acceptOrderResponse.response,);
         if (acceptOrderResponse.response.error == 'true') {
           Alert.alert('Message', acceptOrderResponse.response.errorMessage);
-          if(acceptOrderResponse.response.errorMessage == "Token mismatch"){
+          if(acceptOrderResponse.response.errorMessage == "Incompatibilité de jetons"){
               Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
               AsyncStorage.clear()
               this.props.navigation.navigate("login")

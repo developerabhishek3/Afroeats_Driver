@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {View, Text, Image, TouchableOpacity, ScrollView,Alert,BackHandler} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ScrollView,Alert,BackHandler,} from 'react-native';
 import Styles from './indexCss';
 import FloatingLabel from 'react-native-floating-labels';
 import {CheckBox, Overlay, Button} from 'react-native-elements';
@@ -44,28 +44,30 @@ class Login extends Component {
         // await AsyncStorage.setItem('userLoggedInData',JSON.stringify(loginUserResponse.response));
         await AsyncStorage.setItem('token',JSON.stringify(loginUserResponse.response.token));
         await AsyncStorage.setItem('user_id',JSON.stringify(loginUserResponse.response.usersDetails.id));
-        // let documentVerification = loginUserResponse.response.usersDetails.document_verification
-        // let personal_document_verification = loginUserResponse.response.usersDetails.document_verification
-        // if(documentVerification == 0){
-        //   console.log("FIRST CASE :  : : ")
-
-        //   this.props.navigation.navigate('adddocs');
-        //   await AsyncStorage.setItem('isDocumentVerificationPending', 'true');
-        // }      
-        // else if(personal_document_verification == 0){
-        //   console.log("SECOND CASE :  : : ")
-        //   this.props.navigation.navigate('adddocs');
-        //   await AsyncStorage.setItem('isDocumentVerification', 'true');
-        //   // ALert.alert("Message",`Votre document n'est pas approuvé par l'administrateur`)
-        // } 
-        // else if(documentVerification == 1){
-        //   console.log("THIRD CASE :  : : ")
-        //   // this.props.navigation.navigate('home');
-        //   ALert.alert("Message",`Votre document n'est pas approuvé par l'administrateur`)
-        // }
-        // else {
-        //   this.props.navigation.navigate('home');
-        // }
+        // this.props.navigation.navigate('home');
+        let document_upload = loginUserResponse.response.usersDetails.document_upload
+        let personal_document_verification = loginUserResponse.response.usersDetails.document_verification
+        if(document_upload == 0){
+          console.log("FIRST CASE :  : : ")
+          // await AsyncStorage.setItem('isDocumentUploadPending', 'true');
+          this.props.navigation.navigate('adddocs');         
+        }      
+       
+        else if(personal_document_verification == 0){
+          console.log("THIRD CASE :  : : ")
+          // await AsyncStorage.setItem('isPersonalDocumentPending', 'true');
+          this.props.navigation.navigate('home');
+          this.myAlert("Message",`Votre document n'est pas approuvé par l'administrateur`)
+        }
+        else if(document_upload == 1){
+          console.log("SECOND CASE :  : : ")
+          // await AsyncStorage.setItem('isDocumentUploadDone', 'true');
+          this.props.navigation.navigate('home');         
+          // this.myAlert("Message",`Veuillez télécharger votre document personnel pour vérification.`)
+        }
+        else {
+          this.props.navigation.navigate('home');
+        }
        
       }
     } else {

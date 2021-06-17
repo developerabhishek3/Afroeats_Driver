@@ -56,7 +56,7 @@ class Login extends Component {
               console.log('GEtting value----------',createUserResponse.response.error);
             } else {
               console.log('getting reponse here=================',createUserResponse.response,);
-              this.props.navigation.navigate('login');
+              this.props.navigation.navigate('adddocs');
             }
           } else {
             this.myAlert('Error', createUserResponse.error);

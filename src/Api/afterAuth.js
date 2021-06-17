@@ -45,6 +45,44 @@ export async function dchangePassword(body ={}) {
 
 
 
+
+export async function getDriverDocStatus(body ={}) {
+  const token = await AsyncStorage.getItem('token');
+  const user_id = await AsyncStorage.getItem('user_id');
+
+  const TokenValue = JSON.parse(token);
+  const UserId = JSON.parse(user_id)
+
+  console.log("getting token and id --------------",TokenValue,UserId)
+  try {      
+    const getDriverDocStatusResponse = await Axios.post(
+      'https://food.afroeats.fr/api/getDriverDocStatus',
+      body,
+      {
+        headers: {...commonHeader, 'user-id' : `${UserId}`, 'token' :`${TokenValue}`}  
+      },
+    );
+    if (getDriverDocStatusResponse.status) {
+      return {result: true, response: getDriverDocStatusResponse.data};
+    } else {
+      return {result: false, response: getDriverDocStatusResponse.data};
+    }
+  } catch (err) {
+    let error = new Error();
+    const {data, status} = err.response;
+    error.response = err.response;
+    if (status == 400 && data.error === 'invalid_grant') {
+      error.message = 'Invalid Credentials';
+    } else {
+      error.message = 'Request Failed';
+    }
+    throw error;
+  }
+}
+
+
+
+
 //ADD CHATTING TEXT APi calling here--------
 
 export async function getDriverProfile(body ={}) {
@@ -455,97 +493,6 @@ export async function update_profile_status(body ={}) {
 
 
 
-
-
-    
-    
-
-
-
-        export async function rejectOrder(body ={}) {
-
-          const token = await AsyncStorage.getItem('token');
-          const user_id = await AsyncStorage.getItem('user_id');
-          
-          const TokenValue = JSON.parse(token);
-      
-          // const TokenValue = `5c4eb24aba0d2f09808a86203076d372d3ec44a4e44e2eb5f34cd86008f16ae0`
-          const UserId = JSON.parse(user_id)
-          try {      
-            const rejectOrder = await Axios.post(
-              'https://food.afroeats.fr/api/rejectOrder',
-              body,
-              {
-                headers: {...commonHeader, 'user-id' : UserId, 'token' :`${TokenValue}`}  
-              },
-            );
-            if (rejectOrder.status) {
-              // console.log("getting responsehere   - - -- -- ",rejectOrder.data)
-              return {result: true, response: rejectOrder.data};
-              
-            } else {
-              // console.log("getting else   - - -- -- ",rejectOrder.data)
-              return {result: false, response: rejectOrder.data};
-            }
-          } catch (err) {
-            let error = new Error();
-            const {data, status} = err.response;
-            error.response = err.response;
-            if (status == 400 && data.error === 'invalid_grant') {
-              error.message = 'Invalid Credentials';
-            } else {
-              error.message = 'Request Failed';
-            }
-            throw error;
-          }
-          }
-      
-
-          export async function acceptOrder(body ={}) {
-            const token = await AsyncStorage.getItem('token');
-            const user_id = await AsyncStorage.getItem('user_id');
-          
-            const TokenValue = JSON.parse(token);
-            const UserId = JSON.parse(user_id)
-          
-            console.log("getting token and id --------------",TokenValue,UserId)
-            try {      
-              const acceptOrderResponse = await Axios.post(
-                'https://food.afroeats.fr/api/acceptOrder',
-                body,
-                {
-                  headers: {...commonHeader, 'user-id' : `${UserId}`, 'token' :`${TokenValue}`}  
-                },
-              );
-              if (acceptOrderResponse.status) {
-                return {result: true, response: acceptOrderResponse.data};
-              } else {
-                return {result: false, response: acceptOrderResponse.data};
-              }
-            } catch (err) {
-              let error = new Error();
-              const {data, status} = err.response;
-              error.response = err.response;
-              if (status == 400 && data.error === 'invalid_grant') {
-                error.message = 'Invalid Credentials';
-              } else {
-                error.message = 'Request Failed';
-              }
-              throw error;
-            }
-          }
-
-
-
-
-
-
-
-
-
-
-
-
       export async function orderchat(body ={}) {
 
         const token = await AsyncStorage.getItem('token');
@@ -665,7 +612,51 @@ export async function update_profile_status(body ={}) {
               throw error;
             }
             }
+
+            
+
+            export async function driverTrackOrder(body ={}) {
+
+              const token = await AsyncStorage.getItem('token');
+              const user_id = await AsyncStorage.getItem('user_id');
+              
+              const TokenValue = JSON.parse(token);
           
+              // const TokenValue = `5c4eb24aba0d2f09808a86203076d372d3ec44a4e44e2eb5f34cd86008f16ae0`
+              const UserId = JSON.parse(user_id)
+              try {      
+                const driverTrackOrder = await Axios.post(
+                  'https://food.afroeats.fr/api/driverTrackOrder',
+                  body,
+                  {
+                    headers: {...commonHeader, 'user-id' : UserId, 'token' :`${TokenValue}`}  
+                  },
+                );
+                if (driverTrackOrder.status) {
+                  // console.log("getting responsehere   - - -- -- ",driverTrackOrder.data)
+                  return {result: true, response: driverTrackOrder.data};
+                  
+                } else {
+                  // console.log("getting else   - - -- -- ",driverTrackOrder.data)
+                  return {result: false, response: driverTrackOrder.data};
+                }
+              } catch (err) {
+                let error = new Error();
+                const {data, status} = err.response;
+                error.response = err.response;
+                if (status == 400 && data.error === 'invalid_grant') {
+                  error.message = 'Invalid Credentials';
+                } else {
+                  error.message = 'Request Failed';
+                }
+                throw error;
+              }
+              }
+            
+  
+
+
+
 
 
 // GET WAITING TIME APi calling here---------------

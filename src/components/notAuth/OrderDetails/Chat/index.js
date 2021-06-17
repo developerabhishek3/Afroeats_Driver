@@ -88,11 +88,11 @@ class ChatScreen extends Component {
         const user_id = await AsyncStorage.getItem('user_id');
         const UserId = JSON.parse(user_id) 
         let orderId = this.props.navigation.getParam("orderId") 
-        let sender_id = this.props.navigation.getParam("driver_id")
-        console.log("inside the funciton order id getting - -  - - - - -",orderId,sender_id)  
+        // let sender_id = this.props.navigation.getParam("driver_id")
+        console.log("inside the funciton order id getting - -  - - - - -",orderId)  
         const postOrderResponse = await orderchat({
                 order_id:86405640,
-                sender_id:sender_id,
+                sender_id:UserId,
                 message_by:2,
                 message:this.state.message
             });

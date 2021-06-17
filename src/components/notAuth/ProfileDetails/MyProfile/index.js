@@ -37,7 +37,7 @@ class MyProfile extends Component {
           console.log('getting result here --------',getDriverProfileResponse.response,);
           if (getDriverProfileResponse.response.error == 'true') {
             Alert.alert('Message', getDriverProfileResponse.response.errorMessage);
-            if(getDriverProfileResponse.response.errorMessage == "Token mismatch"){
+            if(getDriverProfileResponse.response.errorMessage == "Incompatibilité de jetons"){
                 Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
                 AsyncStorage.clear()
                 this.props.navigation.navigate("login")
