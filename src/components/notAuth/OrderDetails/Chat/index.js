@@ -155,9 +155,9 @@ class ChatScreen extends Component {
   
     componentDidMount = async () => {      
     
-      setTimeout(() => {
+      setInterval(() => {
           this.mychatDataFunction()
-      }, 1000);
+      }, 3000);
 
 
       BackHandler.addEventListener('hardwareBackPress', () =>
