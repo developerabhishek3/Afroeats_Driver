@@ -18,6 +18,7 @@ export default class index extends Component {
         isSpinner:false,
         isBodyLoaded:false,
         endSeconds:45,
+        delivery_address:"",
       }
     }
 
@@ -41,9 +42,10 @@ export default class index extends Component {
   
   componentDidMount = async () => {      
     this.Show_Custom_Alert()
-    setTimeout(() => {
-      this.getmyOrdersRealTimeFunction()
-    }, 600);   
+    this.getmyOrdersRealTimeFunction()
+    // setTimeout(() => {
+    
+    // }, 200);   
 
    
     let fcm_order_id = this.props.navigation.getParam("fcm_order_id")
@@ -99,7 +101,8 @@ export default class index extends Component {
         // console.log('getting reponse here=================',getmyOrdersRealTimeResponse.response.orderDetails,);  
         var pickup_address = getmyOrdersRealTimeResponse.response.orderDetails.pickup_address     
         var outlet_name = getmyOrdersRealTimeResponse.response.orderDetails.outlet_name     
-        this.setState({pickup_address,outlet_name,isBodyLoaded:true,isSpinner:false})         
+        var delivery_address = getmyOrdersRealTimeResponse.response.orderDetails.delivery_address     
+        this.setState({pickup_address,outlet_name,delivery_address,isBodyLoaded:true,isSpinner:false})         
       }
     } else {
       ALert.alert('Error', getmyOrdersRealTimeResponse.response.errorMessage);
@@ -251,6 +254,20 @@ export default class index extends Component {
                       fontFamily:"Ariel",
                     }}>
                       {this.state.pickup_address}
+                  </Text> 
+
+
+                   <Text
+                    style={{
+                      color: '#FFFFFF',
+                      fontSize: 13,
+                      marginTop:7,
+                      margin:6,
+                      fontWeight: '700',
+                      alignSelf: 'center',
+                      fontFamily:"Ariel",
+                    }}>
+                      {this.state.outlet_name}
                   </Text>                 
                 </View>
 
@@ -315,7 +332,7 @@ export default class index extends Component {
                       alignSelf: 'center',
                     }}>
                 {/* 25/A Christina Church, France  */}
-                {this.state.outlet_name}
+                {this.state.delivery_address}
                   </Text>
                 </View>
 

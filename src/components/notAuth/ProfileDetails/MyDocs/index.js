@@ -303,7 +303,7 @@ Show_Custom_Alert(visible) {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
                           document:this.state.id_proof
                         })} style={Styles.continueBtn1}>
-                            <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
+                            <Text style={Styles.continueBtnTxt1}>Voir</Text>
                         </TouchableOpacity>
                     </View>
                     </View>
@@ -316,7 +316,7 @@ Show_Custom_Alert(visible) {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
                           document:this.state.address_proof
                         })} style={Styles.continueBtn1}>
-                            <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
+                            <Text style={Styles.continueBtnTxt1}>Voir</Text>
                         </TouchableOpacity>
                     </View>
                     </View>
@@ -331,7 +331,7 @@ Show_Custom_Alert(visible) {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
                           document:this.state.driving_license
                         })} style={Styles.continueBtn1}>
-                            <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
+                            <Text style={Styles.continueBtnTxt1}>Voir</Text>
                         </TouchableOpacity>
                     </View>
                     </View>
@@ -346,7 +346,7 @@ Show_Custom_Alert(visible) {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
                           document:this.state.insurance
                         })} style={Styles.continueBtn1}>
-                            <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
+                            <Text style={Styles.continueBtnTxt1}>Voir</Text>
                         </TouchableOpacity>
                     </View>
                     </View>
@@ -361,7 +361,7 @@ Show_Custom_Alert(visible) {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate("openfile",{
                           document:this.state.rc_card
                         })} style={Styles.continueBtn1}>
-                            <Text style={Styles.continueBtnTxt1}>Télécharger</Text>
+                            <Text style={Styles.continueBtnTxt1}>Voir</Text>
                         </TouchableOpacity>
                     </View>
                     </View>

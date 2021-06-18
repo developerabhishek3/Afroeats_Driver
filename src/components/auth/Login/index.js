@@ -176,6 +176,7 @@ async componentDidMount(){
                 autoCapitalize="none"
                 labelStyle={Styles.label}
                 inputStyle={Styles.input}
+                secureTextEntry={true}
                 value={this.state.password}
                 onChangeText={password => this.setState({password})}>
                 Mot de passe

@@ -265,6 +265,7 @@ class AddDocs extends Component {
 
     render() {
 
+        const {document2,document3,document4,document5,document6} = this.state;
     
         return(
             <View style={Styles.container}>
@@ -415,7 +416,7 @@ class AddDocs extends Component {
 
 
 
-
+{/* 
                    <View style={{margin:4,marginTop:7}}>
                    
                    <View style={{flexDirection:"row",alignItems:'center',alignSelf:"center",justifyContent:"space-between",width:"96%",flexWrap:"wrap",borderWidth:0,borderColor:"red",borderBottomColor:"#DDDDDD",borderBottomWidth:1}}>
@@ -430,18 +431,30 @@ class AddDocs extends Component {
                             <Image source={require("../../../assets/icons/2-1.png")} style={{height:10,width:10,marginTop:10,margin:3}} />
                         </TouchableOpacity>
                    </View>
-                   </View>
+                   </View> */}
 
+                   {
+
+                       document2!= "" && document3!= "" && document4!= "" && document5!= "" && document6!= "" ?
+
+                       <TouchableOpacity 
+                       // onPress={()=>{this.Show_Custom_Alert()}}
+                       onPress={()=>{this.upload_document()}}
+                        style={Styles.continueBtn}>
+                               <Text style={Styles.continueBtnTxt}>Télécharger</Text>
+                       </TouchableOpacity>
+
+
+                       :null
+
+
+
+                   }
 
 
                     
                     
-                    <TouchableOpacity 
-                    // onPress={()=>{this.Show_Custom_Alert()}}
-                    onPress={()=>{this.upload_document()}}
-                     style={Styles.continueBtn}>
-                            <Text style={Styles.continueBtnTxt}>Télécharger</Text>
-                    </TouchableOpacity>
+                
 
                 </ScrollView>
 

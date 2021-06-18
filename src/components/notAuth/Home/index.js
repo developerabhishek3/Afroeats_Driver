@@ -140,14 +140,14 @@ class Home extends Component {
 
     update_driver_lat_longFunction = async () => {    
         // console.log("GETTING LAT AND LONG : :  : : : : :: : ",this.state.currentLatitude, this.state.currentLongitude)  
-           // latitude:this.state.currentLatitude,            
-            // longitude:this.state.currentLongitude,
+        // longitude:22.7532848,
+        // longitude:75.8936962
         const user_id = await AsyncStorage.getItem('user_id');
         const UserId = JSON.parse(user_id)    
         const update_driver_lat_longResponse = await update_driver_lat_long({
-            driver_id:UserId,         
-            longitude:22.7532848,
-            longitude:75.8936962
+            driver_id:UserId,                  
+            latitude:this.state.currentLatitude,            
+            longitude:this.state.currentLongitude,
         });
         if (update_driver_lat_longResponse.result == true) {
         //   console.log('getting result here --------',update_driver_lat_longResponse.response,);
