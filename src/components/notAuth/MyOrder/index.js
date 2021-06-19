@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {View, Text, Image, TouchableOpacity, ScrollView,BackHandler,Alert,Dimensions} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ScrollView,BackHandler,Alert,Dimensions,  RefreshControl} from 'react-native';
 import BottomNavigator from '../../../router/BottomNavigator';
 import {getmyOrders} from '../../../Api/afterAuth';
 import Styles from './indexCss';
@@ -18,6 +18,7 @@ class MyOrder extends Component {
           isPastOrderData:false,
           isBodyLoaded: false,
           isSpinner: true,  
+          isCurrenetComponentRefreshing:false,
 
             date:[
                 {
@@ -72,7 +73,7 @@ class MyOrder extends Component {
           var Images =  getmyOrdersResponse.response.past_orders.image_record
           // console.log("GEtting images  - - -",Images)
           // console.log('getting result here for past order --------',currentOrderData); 
-          this.setState({currentOrderData,pastOrderData,isBodyLoaded:true,isSpinner:false})         
+          this.setState({currentOrderData,pastOrderData,isBodyLoaded:true,isSpinner:false,isCurrenetComponentRefreshing:false})         
         }
       } else {
         this.myAlert('Error', getmyOrdersResponse.response.errorMessage);
@@ -174,7 +175,13 @@ isPastOrderDataFunction(){
             
           </TouchableOpacity>
         </View>
-        <ScrollView>
+        <ScrollView 
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+                          <RefreshControl refreshing={this.state.isCurrenetComponentRefreshing} onRefresh={()=>{  this.setState({ isCurrenetComponentRefreshing: true }); setTimeout(()=>{
+                        this.getmyOrdersFunction();
+                      },100)  }} />
+                    }>
         {
           this.state.isBodyLoaded == true ?
 
@@ -204,7 +211,8 @@ isPastOrderDataFunction(){
                         
                         <TouchableOpacity 
                             onPress={()=>{this.props.navigation.navigate("orderdetails",{
-                              orderId:singleMAp.order_id
+                              orderId:singleMAp.order_id,
+                            
                             })}}
                         style={{backgroundColor:"#404040",width:"100%",margin:7,alignSelf:"center",borderRadius:7}}>
                             <View style={{flexDirection:"row",}}>
@@ -231,7 +239,7 @@ isPastOrderDataFunction(){
 
                 :
                 <View style={{flex:2,justifyContent:'center',alignItems:"center",marginTop:SCREEN_HEIGHT/3.5,}}>
-                <Text  style={{alignSelf:"center",color:"#FFFFFF",textAlign:'center'}}>No Past Order Found</Text>
+                <Text  style={{alignSelf:"center",color:"#FFFFFF",textAlign:'center'}}>Aucune commande antérieure trouvée</Text>
               </View>
 
               }
@@ -258,7 +266,8 @@ isPastOrderDataFunction(){
                         return(                            
                             <TouchableOpacity 
                                 onPress={()=>{this.props.navigation.navigate("orderdetails",{
-                                  orderId:singleMAp.order_id
+                                  orderId:singleMAp.order_id,
+                                  isPastOrder:true
                                 })}}
                               style={{backgroundColor:"#404040",width:"100%",margin:7,alignSelf:"center",borderRadius:7}}>
                                 <View style={{flexDirection:"row",}}>
@@ -283,7 +292,7 @@ isPastOrderDataFunction(){
 
                 :
                 <View style={{flex:2,justifyContent:'center',alignItems:"center",marginTop:SCREEN_HEIGHT/3.5,}}>
-                  <Text style={{alignSelf:"center",color:"#FFFFFF",textAlign:'center'}}>No Current Order Found</Text>
+                  <Text style={{alignSelf:"center",color:"#FFFFFF",textAlign:'center'}}>Aucune commande en cours trouvée</Text>
                 </View>
               }
 

@@ -99,7 +99,7 @@ class MyProfile extends Component {
             style={Styles.headerIMG}
           />
           </TouchableOpacity>
-                        <Text style={Styles.headerTxt}>Mes Profile</Text>
+                        <Text style={Styles.headerTxt}>Mon Profil</Text>
                     </View>
                     <TouchableOpacity onPress={()=>{this.props.navigation.navigate("editprofile")}}>
                     <Image
@@ -147,7 +147,7 @@ class MyProfile extends Component {
                       }
                        
                     </View>
-                    <Text style={{color:"#ce9617",fontSize:15,fontFamily:"Ariel",margin:3,fontWeight:"700",alignSelf:"center"}}>Clark Smith</Text>
+                    <Text style={{color:"#ce9617",fontSize:15,fontFamily:"Ariel",margin:3,fontWeight:"700",alignSelf:"center"}}>{driverProfile.fullname}</Text>
 
                     <View style={{margin:16,marginStart:15}}>
                         <Text style={{color:"#ce9617",fontSize:10,fontFamily:"Ariel",margin:3,fontWeight:"600"}}>Nom</Text>

@@ -1,12 +1,12 @@
 import React, {Component,Fragment} from 'react';
-import {View,Text,Image,TouchableOpacity, ScrollView,PermissionsAndroid,Alert,BackHandler,Modal,Dimensions,TouchableWithoutFeedback} from 'react-native';
+import {View,Text,Image,TouchableOpacity, ScrollView,PermissionsAndroid,RefreshControl,Alert,BackHandler,Modal,Dimensions,TouchableWithoutFeedback} from 'react-native';
 import Styles from './indexCss';
 import BottomNavigator from '../../../router/BottomNavigator';
 import ModalDropdown from 'react-native-modal-dropdown';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
-import {update_driver_lat_long,logout_function} from '../../../Api/afterAuth';
+import {update_driver_lat_long,logout_function,getDriverProfile,getDriverProfileStatus} from '../../../Api/afterAuth';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 import GetLocation from 'react-native-get-location'
@@ -21,6 +21,10 @@ class Home extends Component {
             Alert_Visibility: false,
             isBodyLoaded:false,
             isSpinner:false,
+            fullname:"",
+            profileImage:"",
+            isCurrenetComponentRefreshing:false,
+            profile_status:0
         }
     }
     Show_Custom_Alert(visible) {
@@ -117,15 +121,19 @@ class Home extends Component {
       
          
        componentDidMount = async () => {
-
+        this.GetdriverProfileFunction()
+        this.getDriverProfileStatusFunction()
           setInterval(() => {
             this.getCurrentLocation()
-          }, 1000);
+            
+            
+          }, 3000);
 
             setInterval(() => {
               this.callFunctionForLocation()
+             
             }, 5000);
-          
+         
           
   
 
@@ -136,6 +144,69 @@ class Home extends Component {
            
     }
       
+    GetdriverProfileFunction = async () => {       
+      const user_id = await AsyncStorage.getItem('user_id');
+      const UserId = JSON.parse(user_id)    
+      const getDriverProfileResponse = await getDriverProfile({driver_id:UserId});
+      if (getDriverProfileResponse.result == true) {
+        // console.log('getting result here --------',getDriverProfileResponse.response,);
+        if (getDriverProfileResponse.response.error == 'true') {
+          // Alert.alert('Message', getDriverProfileResponse.response.errorMessage);
+          if(getDriverProfileResponse.response.errorMessage == "Incompatibilité de jetons"){
+              // Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
+              console.log("thi is happening here get Profile - -  - - - -  --")
+              AsyncStorage.clear()
+              this.props.navigation.navigate("login")
+            }
+        } else {
+          // console.log('getting reponse here=================',getDriverProfileResponse.response,);  
+          var driverProfile = getDriverProfileResponse.response.usersDetails
+          let fullname =    getDriverProfileResponse.response.usersDetails.fullname
+          let profileImage =    getDriverProfileResponse.response.usersDetails.image
+          this.setState({driverProfile,isBodyLoaded:true,isSpinner:false,fullname,profileImage,  isCurrenetComponentRefreshing:false,})         
+        }
+      } else {
+        this.myAlert('Error', getDriverProfileResponse.response.errorMessage);
+        // console.log('getting error here-------------');
+      }
+      return;
+    };
+
+
+
+
+
+    getDriverProfileStatusFunction = async () => {       
+      const user_id = await AsyncStorage.getItem('user_id');
+      const UserId = JSON.parse(user_id)    
+      const getDriverProfileStatusResponse = await getDriverProfileStatus({driver_id:UserId});
+      if (getDriverProfileStatusResponse.result == true) {
+      
+        if (getDriverProfileStatusResponse.response.error == 'true') {
+          // console.log("getting here - i am abhishek - - -")
+          this.setState({isBodyLoaded:true,isSpinner:false})         
+          // Alert.alert('Message', getDriverProfileStatusResponse.response.errorMessage);
+          if(getDriverProfileStatusResponse.response.errorMessage == "Incompatibilité de jetons"){
+              // Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
+              console.log("thi is happening here get  status - -  - - - -  --")
+              AsyncStorage.clear()
+              this.props.navigation.navigate("login")
+            }
+        } else {
+          // console.log('getting reponse here=================',getDriverProfileStatusResponse.response,); 
+          let profile_status = getDriverProfileStatusResponse.response.usersDetails.profile_status
+          
+          this.setState({isBodyLoaded:true,isSpinner:false,profile_status})         
+        }
+      } else {
+        Alert.alert('Error', getDriverProfileStatusResponse.response.errorMessage);
+        console.log('getting error here-------------');
+      }
+      return;
+    };
+
+
+
 
 
     update_driver_lat_longFunction = async () => {    
@@ -155,6 +226,7 @@ class Home extends Component {
             // Alert.alert('Message', update_driver_lat_longResponse.response.errorMessage);
             if(update_driver_lat_longResponse.response.errorMessage == "Incompatibilité de jetons"){
                 // Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
+                console.log("thi is happening here upate driver lat long - -  - - - -  --")
                 AsyncStorage.clear()
                 this.props.navigation.navigate("login")
               }
@@ -178,7 +250,7 @@ class Home extends Component {
           });
         
           if(LogoutResponse.result === true) {
-              console.log("getting logout response---------------",LogoutResponse.response)
+              // console.log("getting logout response---------------",LogoutResponse.response)
               await AsyncStorage.setItem('userLoggedIn','false')
               let keys = ['token'];
               AsyncStorage.multiRemove(keys)
@@ -188,7 +260,7 @@ class Home extends Component {
           }
           else{
               this.setState({isSpinner: false})          
-              console.log("getting error on logout -------------",LogoutResponse.error)
+              // console.log("getting error on logout -------------",LogoutResponse.error)
           }    
 
         })          
@@ -210,15 +282,14 @@ class Home extends Component {
         } else {
           // console.log('getting inside the else conditin---------------');
           Alert.alert(
-            'Exit App',
-            'Do you want to Exit..',
+            `Quitter l'application`,
+            'Voulez-vous sortir...',
             [
               {
-                text: 'Cancel',
-                style: 'cancel',
+                text: 'Annuler',              
               },
               {
-                text: 'Exit',
+                text: 'Quitter',
                 onPress: () => BackHandler.exitApp(),
               },
             ],
@@ -233,34 +304,75 @@ class Home extends Component {
 
 
 
+    //   showAlert1() {  
+    //     Alert.alert(  
+    //         'Déconnexion',
+    //         'Êtes-vous sûr de vouloir vous déconnecter ?'              
+    //         [  
+    //             {  
+    //                 text: 'Annuler',  
+    //                 onPress: () => console.log('Cancel Pressed'),                     
+    //             },  
+    //             {text: 'OK', onPress: () => console.log('OK Pressed')},  
+    //         ]  
+    //     );  
+    // }  
+    showAlert1() {  
+      Alert.alert(  
+          'Déconnexion',  
+          'Êtes-vous sûr de vouloir vous déconnecter ?',  
+          [  
+              {  
+                  text: 'Annuler',  
+                  onPress: () => {this.Hide_Custom_Alert()}
+              },  
+              {text: 'Oui', onPress: () => {this.Hide_Custom_Alert3()}},  
 
-
-
+          ]  
+      );  
+  }  
 
 
 
     render() {
-        let data = [{
-            value: 'Banana',
-          }, {
-            value: 'Mango',
-          }, {
-            value: 'Pear',
-          }];
+      console.log("getting insdie reneder -  - -- ",this.state.profile_status)
         return(
             <View style={Styles.container}>
                 <View style={Styles.headeView}>
                
                     <Image source={require("../../../assets/icons/logoTxt.png")} resizeMode='contain'  style={{height:36,width:200,borderWidth:0,borderColor:"red",margin:10}} />
                     <TouchableOpacity style={{flexDirection:"row",margin:1}} onPress={() =>{this.Show_Custom_Alert()}}>
-                        <Text style={{color:"#FFF",fontSize:12,fontWeight:"700",margin:7}}>Ghita </Text>
+                        <Text style={{color:"#FFF",fontSize:12,fontWeight:"700",margin:7}}>{this.state.fullname} </Text>
                     <Image source={require("../../../assets/icons/10.png")} style={{height:10,width:10,marginTop:10,margin:3}} />
                     </TouchableOpacity>
-                    <Image source={require("../../../assets/icons/1.png")}   style={{height:40,width:40,marginTop:10}} />
+                    {
+                        this.state.profileImage != "" ?
+
+                        <Image
+                        source={{ uri: this.state.profileImage }} 
+                        style={{height:40,width:40,margin:7,marginEnd:16,borderRadius:30}} />
+
+                        :
+                        <Image source={require("../../../assets/icons/1.png")}   style={{height:40,width:40,marginEnd:16}} />
+
+                    }
+
+
                   
                 </View>
                 <Spinner visible={this.state.isSpinner}/>
 
+                <ScrollView 
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+                          <RefreshControl refreshing={this.state.isCurrenetComponentRefreshing} onRefresh={()=>{  this.setState({ isCurrenetComponentRefreshing: true }); setTimeout(()=>{
+                        this.GetdriverProfileFunction();
+                      },100)  }} />
+                    }>
+
+
+
+            
 
                 <View>
                     <Image source={require("../../../assets/icons/logo.png")} resizeMode="contain" style={{height:90,width:90,alignSelf:"center",margin:30}} />
@@ -272,12 +384,24 @@ class Home extends Component {
                     <Text style={Styles.headerTxt}>de trajet </Text>
                 </View>
 
-                <TouchableOpacity style={Styles.continueBtn} onPress={()=>{this.props.navigation.navigate("onlineoffline")}}>
-                        <Text style={Styles.continueBtnTxt}>Aller en Ligne</Text>
+                <TouchableOpacity style={Styles.continueBtn} 
+                    onPress={()=>{this.props.navigation.navigate("onlineoffline",{
+                      latitude:this.state.currentLatitude,            
+                      longitude:this.state.currentLongitude,
+                    })}}
+                    // onPress={()=>{this.props.navigation.navigate("myorder")}}
+
+                >
+                    <Text style={Styles.continueBtnTxt}>Aller en Ligne/hors</Text>
+                  {/* {
+                    this.state.profile_status == 1 ?
+                    <Text style={Styles.continueBtnTxt}>Aller en Ligne/hors</Text>
+                    :
+                    <Text style={Styles.continueBtnTxt}>Aller en Ligne</Text>
+                  }                 */}
                 </TouchableOpacity>
 
-                <ScrollView>
-
+              
 
                 </ScrollView>
 
@@ -299,15 +423,20 @@ class Home extends Component {
                   }}>
                   <View
                     style={{
-                      width:60,
-                      height:100,
-                      backgroundColor: '#ffffff',
+                      width:99,
+                      height:120,
+                      backgroundColor: '#FFFFFF',
                       alignItems: 'center',
                       justifyContent: 'center',
                       margin: 10,
                       borderRadius: 10,
                     }}>
+                      <TouchableOpacity style={{alignSelf:"flex-end",margin:1,marginEnd:7,marginTop:-3}} onPress={() =>{this.Hide_Custom_Alert()}}>
+                          <Image resizeMode="contain" source={require("../../../assets/icons/17.png")} style={{height:30,width:24,alignSelf:'flex-end'}} />
+                      </TouchableOpacity>
                     <View style={{justifyContent: 'center', alignItems: 'center'}}> 
+
+                      
 
                       <TouchableOpacity 
                       onPress={()=>{this.Hide_Custom_Alert2()}}
@@ -319,27 +448,27 @@ class Home extends Component {
                           alignSelf: 'center',
                           fontWeight: '700',
                           margin:10,
-                          marginTop:10,
+                          marginTop:10,                         
                           color: '#000000',
                           textAlign: 'center',
                           fontFamily: 'Montserrat-Regular',
                         }}>
-                          Profile
+                         Mon Profil
                       </Text>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() =>{this.Hide_Custom_Alert3()}}>
+                      <TouchableOpacity onPress={() =>{this.showAlert1()}}>
                       <Text
                         style={{
                           fontSize: 12,
                           alignSelf: 'center',
                           fontWeight: '700',
                           margin:10,
-                          marginTop:10,
+                          marginTop:10,                         
                           color: '#000000',
                           textAlign: 'center',
                           fontFamily: 'Montserrat-Regular',
                         }}>
-                      Logout
+                     Déconnexion
                       </Text>
                       </TouchableOpacity>
                   
@@ -349,6 +478,10 @@ class Home extends Component {
                 </TouchableWithoutFeedback>
               </Modal>
               </TouchableWithoutFeedback>
+
+
+
+
 
                 <BottomNavigator
                     currentRoute={'home'}

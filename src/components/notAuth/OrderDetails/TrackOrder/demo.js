@@ -218,13 +218,13 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = 0.0421;
 var pickupMarker = [];
 
-var cur_lat =  37.78825
-var cur_long =  -122.4324
+var cur_lat
+var cur_long
 
 
 
 
-// console.disableYellowBox = true;
+console.disableYellowBox = true;
 class PartnerNearMe extends Component {
   constructor(props){
     super(props)
@@ -306,12 +306,12 @@ getCurrentLocationOnTrack(){
    }
 
    updateDriverStatus() {
-
+    return new Promise((resolve, reject) => {
       Geolocation.watchPosition(success => {
           console.log("success watchman:::" + JSON.stringify(success));
           this.setState({
-            currentlatitude: success.coords.latitude,
-            currentlongitude: success.coords.longitude,
+            currentlatitude: info.coords.latitude,
+            currentlongitude: info.coords.longitude,
           })
         },
         );
@@ -324,7 +324,7 @@ getCurrentLocationOnTrack(){
       })
     },
     );
-  
+  })
 }
 
 
@@ -468,7 +468,6 @@ componentDidMount = async () => {
 
     // setInterval(() => {
         // setInterval(() => {
-          this.updateDriverStatus()
           this.driverTrackOrderFunction()  
         // }, 3000);
 
@@ -486,6 +485,60 @@ componentDidMount = async () => {
 
 
 
+// componentWillMount() {
+//   //alert('uhgfc')
+//    //return new Promise((resolve, reject) => {
+//      const { navigation } = this.props;
+//      navigation.addListener('willFocus', () => {
+
+//      Geolocation.watchPosition(success => {
+//          console.log("success watchman:::" + JSON.stringify(success));
+//          cur_lat =success.coords.latitude
+//          cur_long= success.coords.longitude
+//          this.setState({
+//            currentlatitude: success.coords.latitude,
+//            currentlongitude: success.coords.longitude,
+//          })
+      
+//          this.map.animateToRegion({
+//            latitude: cur_lat,
+//            longitude: cur_long,
+//            latitudeDelta: LATITUDE_DELTA,
+//            longitudeDelta: LONGITUDE_DELTA,
+//          })
+//         //  this.getTrackData(success.coords.latitude,success.coords.longitude)
+//         //  this.loop_call()
+//        },
+//        );
+     
+//    Geolocation.getCurrentPosition(info => {
+//      console.log('Current Latitude TrackOrder ', info.coords.latitude)
+//      console.log('Current Longitude TrackOrder ', info.coords.longitude)
+//      cur_lat =info.coords.latitude
+//      cur_long= info.coords.longitude
+//      this.getTrackData(info.coords.latitude,info.coords.longitude)
+//      this.loop_call()
+//      this.setState({
+//        currentlatitude: info.coords.latitude,
+//        currentlongitude: info.coords.longitude,
+//      })
+//    },
+//    ); 
+//  //})
+   
+//  })
+
+
+
+
+
+//  BackHandler.removeEventListener('hardwareBackPress', () =>
+//  this.handleBackButton(this.props.navigation),
+// );
+//  }
+
+
+
 
 
  componentWillMount() {
@@ -499,12 +552,14 @@ componentDidMount = async () => {
       currentlongitude: success.coords.longitude,
     })
  
-    // this.map.animateToRegion({
-    //   latitude: cur_lat,
-    //   longitude: cur_long,
-    //   latitudeDelta: LATITUDE_DELTA,
-    //   longitudeDelta: LONGITUDE_DELTA,
-    // })
+    this.map.animateToRegion({
+      latitude: cur_lat,
+      longitude: cur_long,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    })
+   //  this.getTrackData(success.coords.latitude,success.coords.longitude)
+   //  this.loop_call()
   },
   );
 
@@ -514,6 +569,8 @@ console.log('Current Longitude TrackOrder ', info.coords.longitude)
 cur_lat =info.coords.latitude
 cur_long= info.coords.longitude
 console.log("gettug curene  -  - - -",cur_lat,cur_long)
+//  this.getTrackData(info.coords.latitude,info.coords.longitude)
+//  this.loop_call()
 this.setState({
   currentlatitude: info.coords.latitude,
   currentlongitude: info.coords.longitude,
@@ -574,7 +631,7 @@ onRegionChange(region) {
       });
   
 
-      console.log("status value =  = = = = = = =",cur_lat, cur_long)
+      console.log("status value =  = = = = = = =",this.state.status)
 
 
         const {currentLatitude,currentLongitude} = this.state;
@@ -600,8 +657,7 @@ onRegionChange(region) {
           </TouchableOpacity>
           <Text style={Styles.headerTxt}>Address de Livraison</Text>          
           <Text style={Styles.headerTxt}>         </Text>      
-        </View> 
-        <Spinner visible={this.state.isSpinner} />   
+        </View>        
                 <TouchableOpacity>
                         <View style={{backgroundColor:"#2e2e30",width:"94%",alignSelf:'center',margin:10,borderRadius:6,flexDirection:'row',}}>
                         <Image source={require("../../../../assets/icons/address1.png")} style={{height:24,width:24,margin:4}} />
@@ -615,16 +671,12 @@ onRegionChange(region) {
 
   <View style={Styles.mainContainer}>  
 
-<View style={{                  
-                    position: 'absolute',  
-    top: 0,  
-    left: 0,  
-    right: 0,  
-    bottom: 0,  
-    alignItems: 'center',  
-    justifyContent: 'flex-end',  }}>  
-  
-  <MapView  
+                
+  {cur_long != '' && cur_long != null?
+                      
+        <View>  
+
+        {/* <MapView  
           style={{ position: 'absolute',  
           top: 0,  
           left: 0,  
@@ -646,12 +698,31 @@ onRegionChange(region) {
           
           }}
           
-          > 
- 
+          >  */}
 
 
-          
-    {!!cur_lat && !!cur_long && 
+<MapView  
+    style={{ position: 'absolute',  
+    top: 0,  
+    left: 0,  
+    right: 0,  
+    bottom: 0,  }}  
+    showsUserLocation={true}  
+    zoomEnabled={false}    
+    minZoomLevel={1}
+    maxZoomLevel={200}
+    enableZoomControl={true}
+    initialRegion={{  
+      // latitude:parseFloat(this.state.latitude),   
+      // longitude:parseFloat(this.state.longitude),
+      latitude:48.8566,
+      longitude:2.3522,
+      latitudeDelta: 0.0922,  
+      longitudeDelta: 0.0421,  
+    }}>  
+
+
+    {!!this.state.currentlatitude && !!this.state.currentlongitude && 
     <MapView.Marker
   //  image={require('../assets/truck_icon.png')} image={require('../assets/truck_icon.png')}
 
@@ -725,15 +796,12 @@ onRegionChange(region) {
 
 
 
+        </MapView>  
+        </View>
+    :null
+    }
 
 
-
-
-
-
-
-  </MapView>  
-  </View>
 
 
 

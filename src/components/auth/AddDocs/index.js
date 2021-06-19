@@ -8,6 +8,7 @@ import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DocumentPicker from 'react-native-document-picker';
 import AsyncStorage from '@react-native-community/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 import RNFetchBlob from 'rn-fetch-blob'
 import { Alert } from 'react-native';
 class AddDocs extends Component {
@@ -23,7 +24,9 @@ class AddDocs extends Component {
             document5:"",
             document6:"",
             Model_Visibility: false,
-            Alert_Visibility: false,           
+            Alert_Visibility: false, 
+            isBodyLoaded:false,
+            isSpinner:false,          
             
         }
     }
@@ -143,57 +146,72 @@ class AddDocs extends Component {
 
 
 
-    upload_document = async () => {
+    upload_document(){
        
+        this.setState({ isSpinner: true }, async () => {  
 
 
-        const token = await AsyncStorage.getItem('token');
-        const user_id = await AsyncStorage.getItem('user_id'); 
-        console.log("@!ST CONSOLE : : :  : : : : :",typeof token +"USER ID TYPE :  : : :",typeof user_id)       
-        const TokenValue = JSON.parse(token);
-        // const UserId = JSON.parse(user_id);
 
-        console.log("getting USET+RID ::::"+ user_id + "@ND :::::::"+ token+"@3rd ::::::::" + this.state.document_name3)
-        console.log("@ND CONSOLE : : :  : : : : :",typeof token +"USER ID TYPE :  : : :"+user_id )
+
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id'); 
+            console.log("@!ST CONSOLE : : :  : : : : :",typeof token +"USER ID TYPE :  : : :",typeof user_id)       
+            const TokenValue = JSON.parse(token);
+            // const UserId = JSON.parse(user_id);
     
+            console.log("getting USET+RID ::::"+ user_id + "@ND :::::::"+ token+"@3rd ::::::::" + this.state.document_name3)
+            console.log("@ND CONSOLE : : :  : : : : :",typeof token +"USER ID TYPE :  : : :"+user_id )
+        
+    
+    
+                     
+            let headers = {
+              "Content-Type": "multipart/form-data",
+              "user-id":user_id,
+              "token" : TokenValue,
+        
+          };
+             RNFetchBlob.fetch('POST', 'https://food.afroeats.fr/api/uploadDriverDocument',   headers ,  [
+              { name: 'id_proof', filename: 'photo.jpg', type: 'image/png', data: this.state.document2 },
+              { name: 'address_proof', filename: 'photo.jpg', type: 'image/png', data: this.state.document3  },
+              { name: 'driving_license', filename: 'photo.jpg', type: 'image/png', data: this.state.document4 },
+              { name: 'insurance', filename: 'photo.jpg', type: 'image/png', data: this.state.document5 },
+              { name: 'rc_card', filename: 'photo.jpg', type: 'image/png', data: this.state.document6 },
+              { name: 'driver_id',  data:user_id }
+             
+              ],
+             ).then((resp) => {
+              console.log("response:::::::" + JSON.stringify(resp.json()));
+              console.log("response:::::::" + resp.json().document_status);
+              if(resp.json().error == "false"){
+                this.props.navigation.navigate("home")
+               console.log("sucesss")
+               this.setState({
+                isSpinner:false
+              }); 
+                
+              }
+              else {
+                console.log("unsucesss")
+                Alert.alert("Message",resp.errorMessage)
+                this.setState({
+                    isSpinner:false
+                  }); 
+              }
+              // console.log("resp:::::::::::::",resp)
+             }).catch((err) => {
+              console.log("response::::err:::" + err);
+             
+              });
 
+
+
+
+
+          })
+            
 
         
-        this.setState({isLoading:true})
-        let headers = {
-          "Content-Type": "multipart/form-data",
-          "user-id":user_id,
-          "token" : TokenValue,
-    
-      };
-         RNFetchBlob.fetch('POST', 'https://food.afroeats.fr/api/uploadDriverDocument',   headers ,  [
-          { name: 'id_proof', filename: 'photo.jpg', type: 'image/png', data: this.state.document2 },
-          { name: 'address_proof', filename: 'photo.jpg', type: 'image/png', data: this.state.document3  },
-          { name: 'driving_license', filename: 'photo.jpg', type: 'image/png', data: this.state.document4 },
-          { name: 'insurance', filename: 'photo.jpg', type: 'image/png', data: this.state.document5 },
-          { name: 'rc_card', filename: 'photo.jpg', type: 'image/png', data: this.state.document6 },
-          { name: 'driver_id',  data:user_id }
-         
-          ],
-         ).then((resp) => {
-          console.log("response:::::::" + JSON.stringify(resp.json()));
-          console.log("response:::::::" + resp.json().document_status);
-          if(resp.json().error == "false"){
-            this.props.navigation.navigate("home")
-           console.log("sucesss")
-            this.setState({isLoading:false})
-            
-          }
-          else {
-            console.log("unsucesss")
-            Alert.alert("Message",resp.errorMessage)
-            this.setState({isLoading:false})
-          }
-          // console.log("resp:::::::::::::",resp)
-         }).catch((err) => {
-          console.log("response::::err:::" + err);
-         
-          });
     }
 
 
@@ -278,6 +296,8 @@ class AddDocs extends Component {
                         <Text style={Styles.headerTxt}>Télécharger des documents</Text>
                     </View>
                 </View>
+
+                <Spinner visible={this.state.isSpinner}/>   
                 <ScrollView>
 
 

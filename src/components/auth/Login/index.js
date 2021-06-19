@@ -43,7 +43,9 @@ class Login extends Component {
         await AsyncStorage.setItem('userLoggedIn', 'true');
         // await AsyncStorage.setItem('userLoggedInData',JSON.stringify(loginUserResponse.response));
         await AsyncStorage.setItem('token',JSON.stringify(loginUserResponse.response.token));
-        await AsyncStorage.setItem('user_id',JSON.stringify(loginUserResponse.response.usersDetails.id));
+        await AsyncStorage.setItem('user_id',JSON.stringify(loginUserResponse.response.usersDetails.id));       
+
+
         // this.props.navigation.navigate('home');
         let document_upload = loginUserResponse.response.usersDetails.document_upload
         let personal_document_verification = loginUserResponse.response.usersDetails.document_verification
@@ -57,7 +59,7 @@ class Login extends Component {
           console.log("THIRD CASE :  : : ")
           // await AsyncStorage.setItem('isPersonalDocumentPending', 'true');
           this.props.navigation.navigate('home');
-          this.myAlert("Message",`Votre document n'est pas approuvé par l'administrateur`)
+          // this.myAlert("Message",`Votre document n'est pas approuvé par l'administrateur`)
         }
         else if(document_upload == 1){
           console.log("SECOND CASE :  : : ")
@@ -77,6 +79,51 @@ class Login extends Component {
     return;
   };
 
+
+
+ async checkRemeberMe() {  
+   console.log("inside the checked function - - - - - -  -",this.state.checked1)
+        const rememberChecked = {
+          email: this.state.email,
+          password: this.state.password,
+          checked1: true
+        };
+        const rememberUnchecked = {
+          email: "",
+          password: "",
+          checked1: false
+        };
+        console.log(this.state.checked1);
+        this.setState(
+          {
+            checked1: !this.state.checked1
+          },
+          () => {
+            if (this.state.checked1) {
+              AsyncStorage.setItem("storeData", JSON.stringify(rememberChecked));
+            } else {
+              AsyncStorage.setItem("storeData", JSON.stringify(rememberUnchecked));
+            }
+          }
+        );
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   myAlert = (title = '', message = '') => {
     Alert.alert(title, message);
   };
@@ -88,8 +135,6 @@ class Login extends Component {
       this.myAlert('Message', 'Veuillez entrer votre adresse e-mail!');
     } else if (password.length === 0) {
       this.myAlert('Message', 'Veuillez entrer votre mot de passe!');
-    } else if (checked1 == false) {
-      this.myAlert('Message', `Veuillez vérifier l'état!`);
     } else {
       const mailformat = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g;
       if (!email.match(mailformat)) {
@@ -105,7 +150,19 @@ async componentDidMount(){
   let fcmToken = await AsyncStorage.getItem('fcmToken');
     console.log('FCM token$$$ ' + fcmToken);
 
-
+    try {
+      var storeData = JSON.parse(await AsyncStorage.getItem("storeData"));
+      console.log(storeData, "store data");
+      if (storeData !== null) {
+        this.setState({
+          email: storeData.email,
+          password: storeData.password,
+          remenberChcek: storeData.remenberChcek
+        });
+      }
+    } catch (e) {
+      console.error(e.message);
+    }
 
   BackHandler.addEventListener('hardwareBackPress', () => this.handleBackButton(this.props.navigation));
 }
@@ -113,7 +170,9 @@ async componentDidMount(){
 
 
 
-
+// async componentWillMount() {
+  
+// }
 
 
 
@@ -193,10 +252,8 @@ async componentDidMount(){
                   marginTop: -3,
                 }}>
                 <CheckBox
-                  checked={this.state.checked1}
-                  onPress={() =>
-                    this.setState({checked1: !this.state.checked1})
-                  }
+                  checked={this.state.checked1}                  
+                  onPress={() => this.checkRemeberMe()}
                   checkedIcon={
                     <Image
                       source={require('../../../assets/icons/check-box.png')}
@@ -230,7 +287,33 @@ async componentDidMount(){
                 </Text>
               </View>
 
-              <Text
+
+
+
+                                  {/* <View style={{ flexDirection: 'row' }}>
+                                    <TouchableOpacity onPress={() => this.checkRemeberMe()}>
+                                        {this.state.checked1 === true ?
+                                            <View style={{ width: 20, height: 20, backgroundColor: '#FFB612', borderRadius: 4, flexDirection: 'row',justifyContent: 'center', alignItems: 'center' }}>
+                                                <Image source={require('../../../assets/icons/check-box.png')} style={{ width: 15, height: 15 }} />
+                                            </View> :
+                                            <View style={{ width: 20, height: 20, borderColor: '#FFB612', borderWidth: 1, borderRadius: 4 }} />
+                                        }
+                                    </TouchableOpacity>
+                                    <Text
+                  style={{
+                    color: '#ff8c2d',
+                    fontFamily: 'Arial',
+                    fontWeight: '700',
+                    marginTop: 16,
+                    marginStart: -10,
+                  }}>
+                  Se souvenir de moi
+                </Text>
+                                </View> */}
+ <TouchableOpacity onPress={() => {
+                this.props.navigation.navigate('forgotpassword');
+              }}>
+ <Text
                 style={{
                   color: '#ff8c2d',
                   fontFamily: 'Arial',
@@ -240,11 +323,13 @@ async componentDidMount(){
                 }}>
                 Mot de passe oublié?
               </Text>
+ </TouchableOpacity>
+              
             </View>
 
             <TouchableOpacity
               // onPress={() => {
-              //   this.props.navigation.navigate('home');
+              //   this.props.navigation.navigate('forgotpassword');
               // }}
 
               onPress={() => {
@@ -257,9 +342,9 @@ async componentDidMount(){
             <Text style={Styles.OuStyle}>Ou</Text>
 
             <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('home');
-              }}
+              // onPress={() => {
+              //   this.props.navigation.navigate('home');
+              // }}
               style={Styles.continueBtn1}>
               <Image
                 source={require('../../../assets/icons/facebook.png')}
@@ -269,9 +354,9 @@ async componentDidMount(){
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('home');
-              }}
+              // onPress={() => {
+              //   this.props.navigation.navigate('home');
+              // }}
               style={Styles.continueBtn2}>
               <Image
                 source={require('../../../assets/icons/gmail.png')}

@@ -80,7 +80,7 @@ class Welcome extends Component {
               this.props.navigation.navigate('adddocs');     
             }           
             else if(this.state.personal_document_verification == 0){            
-              Alert.alert("Message",`Votre document n'est pas approuvé par l'administrateur`)
+              // Alert.alert("Message",`Votre document n'est pas approuvé par l'administrateur`)
               this.props.navigation.navigate('home');
             } 
             else if(this.state.document_upload == 1){

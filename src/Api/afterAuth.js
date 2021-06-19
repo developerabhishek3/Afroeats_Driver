@@ -772,6 +772,117 @@ export async function update_profile_status(body ={}) {
                     }
 
 
+
+
+                    
+                  export async function driverForgotPassword(body ={}) {
+
+                    const token = await AsyncStorage.getItem('token');
+                    const user_id = await AsyncStorage.getItem('user_id');
+                    
+                    const TokenValue = JSON.parse(token);
+                
+                    // const TokenValue = `5c4eb24aba0d2f09808a86203076d372d3ec44a4e44e2eb5f34cd86008f16ae0`
+                    const UserId = JSON.parse(user_id)
+                    try {      
+                      const driverForgotPassword = await Axios.post(
+                        'https://food.afroeats.fr/api/driverForgotPassword',
+                        body,
+                        {
+                          headers: {...commonHeader, 'user-id' : UserId, 'token' :`${TokenValue}`}  
+                        },
+                      );
+                      if (driverForgotPassword.status) {
+                        // console.log("getting responsehere   - - -- -- ",driverForgotPassword.data)
+                        return {result: true, response: driverForgotPassword.data};
+                        
+                      } else {
+                        // console.log("getting else   - - -- -- ",driverForgotPassword.data)
+                        return {result: false, response: driverForgotPassword.data};
+                      }
+                    } catch (err) {
+                      let error = new Error();
+                      const {data, status} = err.response;
+                      error.response = err.response;
+                      if (status == 400 && data.error === 'invalid_grant') {
+                        error.message = 'Invalid Credentials';
+                      } else {
+                        error.message = 'Request Failed';
+                      }
+                      throw error;
+                    }
+                    }
+
+
+
+
+    export async function getDriverfaq() {
+
+        const token = await AsyncStorage.getItem('token');
+        const user_id = await AsyncStorage.getItem('user_id');
+        
+        const TokenValue = JSON.parse(token);
+        const UserId = JSON.parse(user_id)
+        
+        console.log("getting token and user id here inside the function-----------",UserId)
+       
+        try {
+          const getDriverfaqResponse = await Axios.get(
+            'https://food.afroeats.fr/api/getDriverfaq',      
+            {
+              headers: {...commonHeader, 'user-id' : `${UserId}`, 'token' :`${TokenValue}`}   
+            },
+          );
+          if (getDriverfaqResponse.status) {
+            // console.log("getting response on the function--------",getDriverfaqResponse.data)
+            return {result: true, response: getDriverfaqResponse.data};
+          } else {
+            // console.log("getting error on the function--------",getDriverfaqResponse.data)
+            return {result: false, error: getDriverfaqResponse.data};
+          }
+        } catch (error) {
+          return {result: false, error};
+        }
+      }
+      
+      export async function getDriverProfileStatus(body ={}) {
+
+        const token = await AsyncStorage.getItem('token');
+        const user_id = await AsyncStorage.getItem('user_id');
+        
+        const TokenValue = JSON.parse(token);
+    
+        // const TokenValue = `5c4eb24aba0d2f09808a86203076d372d3ec44a4e44e2eb5f34cd86008f16ae0`
+        const UserId = JSON.parse(user_id)
+        try {      
+          const getDriverProfileStatus = await Axios.post(
+            'https://food.afroeats.fr/api/getDriverProfileStatus',
+            body,
+            {
+              headers: {...commonHeader, 'user-id' : UserId, 'token' :`${TokenValue}`}  
+            },
+          );
+          if (getDriverProfileStatus.status) {
+            // console.log("getting responsehere   - - -- -- ",getDriverProfileStatus.data)
+            return {result: true, response: getDriverProfileStatus.data};
+            
+          } else {
+            // console.log("getting else   - - -- -- ",getDriverProfileStatus.data)
+            return {result: false, response: getDriverProfileStatus.data};
+          }
+        } catch (err) {
+          let error = new Error();
+          const {data, status} = err.response;
+          error.response = err.response;
+          if (status == 400 && data.error === 'invalid_grant') {
+            error.message = 'Invalid Credentials';
+          } else {
+            error.message = 'Request Failed';
+          }
+          throw error;
+        }
+        }
+
 // GET WAITING TIME APi calling here---------------
 
 

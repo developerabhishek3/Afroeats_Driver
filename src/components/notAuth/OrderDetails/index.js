@@ -222,8 +222,10 @@ class OrderDetails extends Component {
 
   render() {
     let orderId = this.props.navigation.getParam("orderId") 
+    let isPastOrder = this.props.navigation.getParam("isPastOrder") 
+    
     const {orderDetails,currentLatitude,currentLongitude}  = this.state;
-    console.log("getting order details herev- -  -  - -  -",orderId)
+    console.log("getting order details herev- -  -  - -  -",orderId,isPastOrder)
 
     return (
       <View style={Styles.container}>
@@ -318,20 +320,39 @@ class OrderDetails extends Component {
 
 
                     <Text style={{color:"#e17e2d",fontSize:10,paddingStart:20,margin:4,fontFamily:"Ariel",fontWeight:"700"}}>Adresse de livraison</Text>                        
-                    <TouchableOpacity onPress={()=>{this.props.navigation.navigate("trackorder",{
-                      delivery_address:this.state.delivery_address,
-                      orderId:orderId,
-                      delivery_latitude:JSON.parse(this.state.delivery_latitude),
-                      delivery_longitude:JSON.parse(this.state.delivery_longitude),
-                      // lat:currentLatitude,
-                      // long:currentLongitude
-                      lat:JSON.parse(this.state.latitude),
-                      long:JSON.parse(this.state.longitude)
-                    })}} style={{margin:0,flexDirection:"row",marginStart:20}}>
+
+                    {
+                        isPastOrder == true ?
+
+
+
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate("trackorder",{
+                          delivery_address:this.state.delivery_address,
+                          orderId:orderId,
+                          delivery_latitude:JSON.parse(this.state.delivery_latitude),
+                          delivery_longitude:JSON.parse(this.state.delivery_longitude),
+                          // lat:currentLatitude,
+                          // long:currentLongitude
+                          lat:JSON.parse(this.state.latitude),
+                          long:JSON.parse(this.state.longitude)
+                        })}} style={{margin:0,flexDirection:"row",marginStart:20}}>
+                            <Image source={require("../../../assets/icons/address1.png")} style={{height:16,width:16,margin:3}} />
+                            <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:4,width:SCREEN_WIDTH*0.85}}>{this.state.delivery_address}</Text>                        
+                        </TouchableOpacity>
+                        :
+
+                        <View  style={{margin:0,flexDirection:"row",marginStart:20}}>
                         <Image source={require("../../../assets/icons/address1.png")} style={{height:16,width:16,margin:3}} />
                         <Text style={{color:"#cccccc",fontSize:10,fontFamily:"Ariel",fontWeight:"700",margin:4,width:SCREEN_WIDTH*0.85}}>{this.state.delivery_address}</Text>                        
-                    </TouchableOpacity>
+                    </View>
 
+
+                    }
+                  
+
+
+
+                 
                     <Text style={{color:"#e17e2d",fontSize:10,marginTop:20,margin:4,paddingStart:20,fontFamily:"Ariel",fontWeight:"700"}}>Nom d'utilisateur</Text>                        
                     <View style={{margin:1,flexDirection:"row",marginStart:20,justifyContent:"space-between",alignItems:'center'}}>
                         <View style={{flexDirection:"row"}}>
@@ -342,7 +363,10 @@ class OrderDetails extends Component {
                             </View>
                           
                         </View>
-                        <View style={{flexDirection:"row"}}>
+                        {   
+                          isPastOrder == true ?
+
+                          <View style={{flexDirection:"row"}}>
                           <TouchableOpacity onPress={() =>{this.props.navigation.navigate("chat",{
                             orderId:orderId,
                             // driver_id:singleOrderDetails.driver_id
@@ -357,11 +381,20 @@ class OrderDetails extends Component {
                         <Image source={require("../../../assets/icons/p.png")} style={{height:30,width:30,margin:10}} />
                         </TouchableOpacity>
                         </View>
-                    </View>
+                          :null
 
-                    <TouchableOpacity onPress={()=>{this.Show_Custom_Alert()}} style={Styles.continueBtn}>
-                      <Text style={Styles.continueBtnTxt}>Annuler</Text>
-                    </TouchableOpacity>
+
+                        }
+                      
+                    </View>
+                        {
+                           isPastOrder == true ?
+                           <TouchableOpacity onPress={()=>{this.Show_Custom_Alert()}} style={Styles.continueBtn}>
+                           <Text style={Styles.continueBtnTxt}>Annuler</Text>
+                         </TouchableOpacity>
+                           :null
+                        }
+                 
           
 
 
