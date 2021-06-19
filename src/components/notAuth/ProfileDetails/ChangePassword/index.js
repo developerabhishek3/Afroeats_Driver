@@ -65,6 +65,7 @@ class ChangePassword extends Component {
 
         const UserId = JSON.parse(user_id)  
       const { old_password, new_password} = this.state;
+      console.log("getting all value inside changed password function - - - - ",UserId,old_password,new_password)
       const dchangePasswordResponse = await dchangePassword({
         driver_id:UserId,
         old_password,
@@ -78,7 +79,7 @@ class ChangePassword extends Component {
         if (dchangePasswordResponse.response.error == 'true') {
           Alert.alert('Message', dchangePasswordResponse.response.errorMessage);
         } else {
-          ALert,alert("Message","Password Update Successfully !")
+          Alert.alert("Message","Le changement de mot de passe a réussi !")
           this.props.navigation.navigate("home")
           console.log(
             'getting reponse here=================',
@@ -87,7 +88,7 @@ class ChangePassword extends Component {
 
         }
       } else {
-        this.myAlert('Error', dchangePasswordResponse.response.errorMessage);
+        Alert.alert('Error', dchangePasswordResponse.response.errorMessage);
         console.log('getting error here-------------');
       }
       return;
@@ -184,7 +185,7 @@ class ChangePassword extends Component {
 
                 <View  style={{height:45,padding:7,margin:10,fontSize:12,flexDirection:"row",justifyContent:"space-between",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}>
                   <TextInput
-                    style={{color:"#FFFFFF",padding:6,fontWeight:"700",fontFamily:"Ariel",paddingStart:10,width:"80%",borderWidth:0,borderColor:"red",color:"#FFFFFF",}}
+                    style={{color:"#FFFFFF",padding:6,fontWeight:"600",fontFamily:"Ariel",paddingStart:10,width:"80%",borderWidth:0,borderColor:"red",color:"#FFFFFF",}}
                     value={this.state.old_password}
                     onChangeText={(old_password)=>this.setState({old_password})}
                     placeholder="Ancien Mot De Passe"
@@ -196,10 +197,10 @@ class ChangePassword extends Component {
                       value={!this.state.showPassword1}>
                         {
                           this.state.showPassword1 == true ?
-                          <Image  source={require('../../../../assets/icons/PwdShow.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
+                          <Image  source={require('../../../../assets/icons/invisible.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
                         
                           :
-                          <Image  source={require('../../../../assets/icons/invisible.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
+                          <Image  source={require('../../../../assets/icons/PwdShow.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
                         }                 
                  </TouchableOpacity>
                       </View>
@@ -220,7 +221,7 @@ class ChangePassword extends Component {
                         
 <View  style={{height:45,padding:7,margin:10,fontSize:12,flexDirection:"row",justifyContent:"space-between",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}>
                   <TextInput
-                   style={{color:"#FFFFFF",padding:6,fontWeight:"700",fontFamily:"Ariel",paddingStart:10,width:"80%",borderWidth:0,borderColor:"red",color:"#FFFFFF",}}
+                   style={{color:"#FFFFFF",padding:6,fontWeight:"600",fontFamily:"Ariel",paddingStart:10,width:"80%",borderWidth:0,borderColor:"red",color:"#FFFFFF",}}
                     value={this.state.new_password}
                     onChangeText={(new_password)=>this.setState({new_password})}
                     placeholder="Nouveau Mot de Passe"
@@ -232,10 +233,10 @@ class ChangePassword extends Component {
                       value={!this.state.showPassword2}>
                         {
                           this.state.showPassword2 == true ?
-                          <Image  source={require('../../../../assets/icons/PwdShow.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
+                          <Image  source={require('../../../../assets/icons/invisible.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
                         
                           :
-                          <Image  source={require('../../../../assets/icons/invisible.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
+                          <Image  source={require('../../../../assets/icons/PwdShow.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
                         }                 
                  </TouchableOpacity>
                       </View>
@@ -267,7 +268,7 @@ class ChangePassword extends Component {
 
 <View  style={{height:45,padding:7,margin:10,fontSize:12,flexDirection:"row",justifyContent:"space-between",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}>
                   <TextInput
-                    style={{color:"#FFFFFF",padding:6,fontWeight:"700",fontFamily:"Ariel",paddingStart:10,width:"80%",borderWidth:0,borderColor:"red",color:"#FFFFFF",}}
+                    style={{color:"#FFFFFF",padding:6,fontWeight:"600",fontFamily:"Ariel",paddingStart:10,width:"80%",borderWidth:0,borderColor:"red",color:"#FFFFFF",}}
                     placeholderTextColor="#FFFFFF"
                     value={this.state.confirm_password}
                     onChangeText={(confirm_password) => this.setState({ confirm_password })}
@@ -279,10 +280,10 @@ class ChangePassword extends Component {
                       value={!this.state.showPassword3}>
                         {
                           this.state.showPassword3 == true ?
-                          <Image  source={require('../../../../assets/icons/PwdShow.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
+                          <Image  source={require('../../../../assets/icons/invisible.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
                         
                           :
-                          <Image  source={require('../../../../assets/icons/invisible.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
+                          <Image  source={require('../../../../assets/icons/PwdShow.png')} style={{width: 30, height: 30,marginTop:10,margin:6}} />
                         }                 
                  </TouchableOpacity>
                       </View>

@@ -54,10 +54,12 @@ class ChatScreen extends Component {
       const UserId = JSON.parse(user_id) 
       let orderId = this.props.navigation.getParam("orderId") 
       console.log("inside the funciton order id getting - -  - - - - -",orderId)  
-      const getChatDataResponse = await getOrderchat({order_id:86405640});
+      const getChatDataResponse = await getOrderchat({order_id:orderId});
       if (getChatDataResponse.result == true) {      
         if (getChatDataResponse.response.error == 'true') {
-          Alert.alert('Message', getChatDataResponse.response.errorMessage);
+          this.setState({isSpinner:false,isBodyLoaded:true})         
+          // Alert.alert('Message', getChatDataResponse.response.errorMessage);
+          // console.log("inside the funciton order id getting - -  - - - - -",getChatDataResponse.response) 
           if(getChatDataResponse.response.errorMessage == "Token mismatch"){
               Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
               AsyncStorage.clear()
@@ -66,7 +68,7 @@ class ChatScreen extends Component {
         } else {
           // console.log('getting reponse here=================',getChatDataResponse.response,);  
           var chatData = getChatDataResponse.response.DriverOrderChat
-          console.log('getting result here for chatData order --------',chatData);         
+          // console.log('getting result here for chatData order --------',chatData);         
           this.setState({chatData,isSpinner:false,isBodyLoaded:true})         
         }
       } else {
@@ -91,7 +93,7 @@ class ChatScreen extends Component {
         // let sender_id = this.props.navigation.getParam("driver_id")
         console.log("inside the funciton order id getting - -  - - - - -",orderId)  
         const postOrderResponse = await orderchat({
-                order_id:86405640,
+                order_id:orderId,
                 sender_id:UserId,
                 message_by:2,
                 message:this.state.message
@@ -111,7 +113,7 @@ class ChatScreen extends Component {
                 }); 
               }
           } else {
-            console.log('getting reponse here=================',postOrderResponse.response,);  
+            // console.log('getting reponse here=================',postOrderResponse.response,);  
                 this.mychatDataFunction()  
                  this.setState({message:"",  isSpinner:false})      
           }
@@ -157,7 +159,7 @@ class ChatScreen extends Component {
     
       setInterval(() => {
           this.mychatDataFunction()
-      }, 3000);
+      }, 2000);
 
 
       BackHandler.addEventListener('hardwareBackPress', () =>
@@ -262,12 +264,12 @@ class ChatScreen extends Component {
         }
     </ScrollView>
     :<View style={{alignItems:'center',justifyContent:'center',marginTop:200}}>
-    <Text style={{fontSize:18,fontWeight:'700',textAlign:'center'}}>Record non trouvé!</Text>
+    <Text style={{fontSize:18,fontWeight:'700',textAlign:'center'}}></Text>
   </View>
 }
         </Fragment>          
         :<View>
-        <Text>chargement...</Text>
+        <Text></Text>
     </View>
       }        
     </View>
@@ -284,7 +286,7 @@ class ChatScreen extends Component {
                   onChangeText={(message) => this.setState({message})}
                 style={{width:'80%',borderWidth:0,borderRadius:20,marginStart:10,color:"#cecac6"}}
                 placeholderTextColor="#cecac6"
-                placeholder="Enter message here" />
+                placeholder="Entrez votre message" />
                 <TouchableOpacity
                      onPress={()=>{this.validateFunction()}}
                 >

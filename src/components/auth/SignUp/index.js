@@ -51,13 +51,14 @@ class Login extends Component {
             password:MotdePasse                 
         });
         if (createUserResponse.result == true) {                     
-            Alert.alert('Message', createUserResponse.response.errorMessage);
-            if (createUserResponse.response.error == 'true') {             
+         
+            if (createUserResponse.response.error == 'true') {    
+              Alert.alert('Message', createUserResponse.response.errorMessage);         
               console.log('GEtting value----------',createUserResponse.response.error);
             } else {
               console.log('getting reponse here=================',createUserResponse.response,);
               // this.props.navigation.navigate('adddocs');
-
+              Alert.alert("Message","Le changement de mot de passe a réussi !")
               this.props.navigation.navigate('login');
             }
           } else {
@@ -253,6 +254,7 @@ class Login extends Component {
 
                                 <FloatingLabel                    
                                         autoCapitalize="none"
+                                        secureTextEntry={true}
                                         labelStyle={Styles.label}
                                         inputStyle={Styles.input}
                                         value={this.state.MotdePasse}

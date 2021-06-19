@@ -188,8 +188,7 @@ class MyCommsion extends Component {
     this.state.orderData.map((singleMAp)=>{
         return(
             
-            <TouchableOpacity 
-                onPress={()=>{this.props.navigation.navigate("orderdetails")}}
+            <View              
             style={{backgroundColor:"#404040",width:"100%",margin:7,alignSelf:"center",borderRadius:7}}>
                 
                     <View style={{flexDirection:"row",justifyContent:"space-between"}}>
@@ -208,7 +207,7 @@ class MyCommsion extends Component {
                     </View>
                     </View>
                    
-            </TouchableOpacity>
+            </View>
         )
     })
 }

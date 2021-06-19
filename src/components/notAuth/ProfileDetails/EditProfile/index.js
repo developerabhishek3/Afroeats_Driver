@@ -25,7 +25,7 @@ class EditProfile extends Component {
             path:"",
             password:"",
             isBodyLoaded:false,
-            isSpinner:false,
+            isSpinner:true,
             imgsource:"",
             driverProfile:[]
         }
@@ -78,8 +78,17 @@ class EditProfile extends Component {
             }
         } else {
           console.log('getting reponse here=================',getDriverProfileResponse.response,);  
-          var driverProfile = getDriverProfileResponse.response.usersDetails     
-          this.setState({driverProfile,isBodyLoaded:true,isSpinner:false})         
+          var driverProfile = getDriverProfileResponse.response.usersDetails  
+          let  courriel = getDriverProfileResponse.response.usersDetails.email 
+          let nom = getDriverProfileResponse.response.usersDetails.fullname 
+          let path = getDriverProfileResponse.response.usersDetails.image
+          let nom_de_famille = getDriverProfileResponse.response.usersDetails.last_name;           
+        
+          let n_de_rau = getDriverProfileResponse.response.usersDetails.street_number
+         let  rau = getDriverProfileResponse.response.usersDetails.street 
+         let postcode = getDriverProfileResponse.response.usersDetails.postal_code
+          let telephone = getDriverProfileResponse.response.usersDetails.mobile    
+          this.setState({driverProfile,isBodyLoaded:true,isSpinner:false,n_de_rau,courriel,nom,path,nom_de_famille,rau,postcode,telephone})         
         }
       } else {
         this.myAlert('Error', getDriverProfileResponse.response.errorMessage);
@@ -135,7 +144,8 @@ class EditProfile extends Component {
             console.log("response:::::::" + JSON.stringify(resp.text()));
             
             if(resp.json().error === "false"){
-              Alert.alert("Message","Mise à jour du profil réussie")            
+              Alert.alert("Message","Mise à jour du profil réussie")  
+              this.GetdriverProfileFunction()          
               this.props.navigation.navigate("home")   
             this.setState({
               isSpinner:false
@@ -274,148 +284,168 @@ class EditProfile extends Component {
                  
                 </View>
                 <Spinner visible={this.state.isSpinner}/>   
+                { 
 
-                <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={130} extraScrollHeight={130} showsVerticalScrollIndicator={false}>
-                <ScrollView>
-                <TouchableOpacity>
+                  this.state.isBodyLoaded == true ?
 
-              <Image
-                        source={require('../../../../assets/icons/food.png')}
-                        style={{height:180,width:'100%'}}
-                    />
 
-                </TouchableOpacity>
-           
 
-              
-                    <View >
-                 
-            {
-             this.state.path == "" ?
-             <View style={{marginTop: -60}}>
-              <Image
-                            source={require('../../../../assets/icons/13.png')}
-                            style={{height:80,width:80,alignSelf:"center"}}
-                        />
-           </View>
-          :
-             <View style={{marginTop: -60}}>
-             <Image  source={{ uri: this.state.path }}  style={{height:80,width:80,alignSelf:"center",borderRadius:60}} />
-           </View>
-           }
+
+
+
+                  <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={130} extraScrollHeight={130} showsVerticalScrollIndicator={false}>
+                  <ScrollView>
+                  <TouchableOpacity>
+  
+                <Image
+                          source={require('../../../../assets/icons/food.png')}
+                          style={{height:180,width:'100%'}}
+                      />
+  
+                  </TouchableOpacity>
+             
+  
+                
+                      <View >
                    
-
-                        <TouchableOpacity onPress={this.chooseFile.bind(this)} style={{height:30,width:30,alignSelf:'center'}}>
-                            <Image   source={require('../../../../assets/icons/edit.png')} style={{height:30,width:30,margin:-15,alignSelf:'center'}} />
-                        </TouchableOpacity>
-
-
-                        <Text style={{color:"#ce9617",fontSize:16,fontFamily:"Ariel",marginTop:-10,fontWeight:"700",alignSelf:"center"}}>Clerk Smith</Text>
-                    </View>
-
-                    {/* <View style={{margin:16,marginStart:15}}>
-                        <Text style={{color:"#ce9617",fontSize:10,fontFamily:"Ariel",margin:3,fontWeight:"700"}}>Nom</Text>
-                        <Text style={{color:"#f1f1f1",fontSize:12,fontFamily:"Ariel",margin:4,fontWeight:"700"}}>John Smith</Text>
-                    </View> */}
-
-                    <View>
-                        <TextInput
-                            value={this.state.nom}
-                            onChangeText={(nom)=>this.setState({nom})}
-                            placeholder="Nom"
-                            placeholderTextColor="#FFFFFF"
-                            style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        ></TextInput>
-                    </View>
-
+              {
+               this.state.path == "" ?
+               <View style={{marginTop: -60}}>
+                <Image
+                               source={{ uri: this.state.profileImage }} 
+                              style={{height:80,width:80,alignSelf:"center"}}
+                          />
+             </View>
+            :
+               <View style={{marginTop: -60}}>
+               <Image  source={{ uri: this.state.path }}  style={{height:80,width:80,alignSelf:"center",borderRadius:60}} />
+             </View>
+             }
+                     
+  
+                          <TouchableOpacity onPress={this.chooseFile.bind(this)} style={{height:30,width:30,alignSelf:'center'}}>
+                              <Image   source={require('../../../../assets/icons/edit.png')} style={{height:30,width:30,margin:-15,alignSelf:'center'}} />
+                          </TouchableOpacity>
+  
+  
+                          <Text style={{color:"#ce9617",fontSize:16,fontFamily:"Ariel",marginTop:-10,fontWeight:"700",alignSelf:"center"}}>{this.state.nom}</Text>
+                      </View>
+  
+                      {/* <View style={{margin:16,marginStart:15}}>
+                          <Text style={{color:"#ce9617",fontSize:10,fontFamily:"Ariel",margin:3,fontWeight:"700"}}>Nom</Text>
+                          <Text style={{color:"#f1f1f1",fontSize:12,fontFamily:"Ariel",margin:4,fontWeight:"700"}}>John Smith</Text>
+                      </View> */}
+  
+                      <View>
+                          <TextInput
+                              value={this.state.nom}
+                              onChangeText={(nom)=>this.setState({nom})}
+                              placeholder="Nom"
+                              placeholderTextColor="#FFFFFF"
+                              style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
+                          ></TextInput>
+                      </View>
+  
+                      
+                      {/* <View>
+                          <TextInput
+                              value={this.state.nom_de_famille}
+                              onChangeText={(nom_de_famille)=>this.setState({nom_de_famille})}
+                              placeholder="Nom de famille"
+                              placeholderTextColor="#FFFFFF"
+                              style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
+                          >
+  
+                          </TextInput>
+                      </View> */}
+  
+  
+                      <View>
+                          <TextInput
+                              value={this.state.courriel}
+                              onChangeText={(courriel)=>this.setState({courriel})}
+                              placeholder="Courriel"
+                              placeholderTextColor="#FFFFFF"
+                              style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
+                          ></TextInput>
+                      </View>
+  
+  
+                      <View>
+                          <TextInput
+                              value={this.state.n_de_rau}
+                              onChangeText={(n_de_rau)=>this.setState({n_de_rau})}
+                              placeholder="N De Rau"
+                              keyboardType="numeric"
+                              placeholderTextColor="#FFFFFF"
+                              style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
+                          ></TextInput>
+                      </View>
+  
+                      <View>
+                          <TextInput
+                              value={this.state.rau}
+                              onChangeText={(rau)=>this.setState({rau})}
+                              placeholder="Rue"
+                              placeholderTextColor="#FFFFFF"
+                              style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
+                          ></TextInput>
+                      </View>
+  
+  
+                      <View>
+                          <TextInput
+                              value={this.state.postcode}
+                              onChangeText={(postcode)=>this.setState({postcode})}
+                              placeholder="Code postal"
+                              keyboardType="numeric"
+                              placeholderTextColor="#FFFFFF"
+                              style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
+                          ></TextInput>
+                      </View>
+  
+                      <View>
+                          <TextInput
+                              value={this.state.telephone}
+                              onChangeText={(telephone)=>this.setState({telephone})}
+                              placeholder="Telephone"
+                              keyboardType="numeric"
+                              placeholderTextColor="#FFFFFF"
+                              style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
+                          ></TextInput>
+                      </View>
+  
+  
                     
-                    <View>
-                        <TextInput
-                            value={this.state.nom_de_famille}
-                            onChangeText={(nom_de_famille)=>this.setState({nom_de_famille})}
-                            placeholder="Nom de famille"
-                            placeholderTextColor="#FFFFFF"
-                            style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        ></TextInput>
-                    </View>
+                      <TouchableOpacity 
+                      onPress={()=>{this.uploadWholeData()}}
+                      // onPress={()=>{this.validateUser()}}
+                      
+                      style={Styles.continueBtn}>
+                              <Text style={Styles.continueBtnTxt}>Enregistrer</Text>
+                      </TouchableOpacity>
+  
+                      {/* <TouchableOpacity 
+                          onPress={()=>{this.props.navigation.navigate("EditProfile")}}
+                          style={{flexDirection:"row",margin:4,paddingStart:4,alignItems:"center"}}>
+                          <Image source={require("../../../assets/icons/15.png")} style={{height:30,width:30,margin:7}} />
+                          <Text style={{color:"#cdcdcd",fontSize:14,fontWeight:"700",fontFamily:"Ariel",margin:15}}>Mon Profile</Text>
+                      </TouchableOpacity> */}
+  
+                      
+  
+                  </ScrollView>
+                  </KeyboardAwareScrollView>
 
 
-                    <View>
-                        <TextInput
-                            value={this.state.courriel}
-                            onChangeText={(courriel)=>this.setState({courriel})}
-                            placeholder="Courriel"
-                            placeholderTextColor="#FFFFFF"
-                            style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        ></TextInput>
-                    </View>
+                  :<View>
+                    <Text></Text>
+                  </View>
+                
+                }
 
 
-                    <View>
-                        <TextInput
-                            value={this.state.n_de_rau}
-                            onChangeText={(n_de_rau)=>this.setState({n_de_rau})}
-                            placeholder="N De Rau"
-                            keyboardType="numeric"
-                            placeholderTextColor="#FFFFFF"
-                            style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        ></TextInput>
-                    </View>
 
-                    <View>
-                        <TextInput
-                            value={this.state.rau}
-                            onChangeText={(rau)=>this.setState({rau})}
-                            placeholder="Rue"
-                            placeholderTextColor="#FFFFFF"
-                            style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        ></TextInput>
-                    </View>
-
-
-                    <View>
-                        <TextInput
-                            value={this.state.postcode}
-                            onChangeText={(postcode)=>this.setState({postcode})}
-                            placeholder="Code postal"
-                            keyboardType="numeric"
-                            placeholderTextColor="#FFFFFF"
-                            style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        ></TextInput>
-                    </View>
-
-                    <View>
-                        <TextInput
-                            value={this.state.telephone}
-                            onChangeText={(telephone)=>this.setState({telephone})}
-                            placeholder="Telephone"
-                            keyboardType="numeric"
-                            placeholderTextColor="#FFFFFF"
-                            style={{padding:7,margin:10,fontSize:12,fontWeight:"700",fontFamily:"Ariel",paddingStart:15,color:"#FFFFFF",backgroundColor:"#404040",borderColor:"#FFFFFF",borderWidth:1,width:"85%",borderRadius:7,alignItems:"center",alignSelf:"center"}}
-                        ></TextInput>
-                    </View>
-
-
-                  
-                    <TouchableOpacity 
-                    onPress={()=>{this.uploadWholeData()}}
-                    // onPress={()=>{this.validateUser()}}
-                    
-                    style={Styles.continueBtn}>
-                            <Text style={Styles.continueBtnTxt}>Enregistrer</Text>
-                    </TouchableOpacity>
-
-                    {/* <TouchableOpacity 
-                        onPress={()=>{this.props.navigation.navigate("EditProfile")}}
-                        style={{flexDirection:"row",margin:4,paddingStart:4,alignItems:"center"}}>
-                        <Image source={require("../../../assets/icons/15.png")} style={{height:30,width:30,margin:7}} />
-                        <Text style={{color:"#cdcdcd",fontSize:14,fontWeight:"700",fontFamily:"Ariel",margin:15}}>Mon Profile</Text>
-                    </TouchableOpacity> */}
-
-                    
-
-                </ScrollView>
-                </KeyboardAwareScrollView>
 
                 {/* <BottomNavigator
                     currentRoute={'profile'}

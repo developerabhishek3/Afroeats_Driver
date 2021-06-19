@@ -93,7 +93,7 @@ export default class index extends Component {
       if (getmyOrdersRealTimeResponse.response.error == 'true') {
         Alert.alert('Message', getmyOrdersRealTimeResponse.response.errorMessage);
         if(getmyOrdersRealTimeResponse.response.errorMessage == "Incompatibilité de jetons"){
-            Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
+            // Alert.alert("","La session a expiré. Veuillez vous connecter à nouveau")
             AsyncStorage.clear()
             this.props.navigation.navigate("login")
           }
@@ -139,7 +139,7 @@ export default class index extends Component {
         } else {
           console.log('getting reponse here=================',rejectOrderResponse.response);  
           Alert.alert("Message",rejectOrderResponse.response.errorMessage)
-          this.props.navigation.navigate("home")  
+          this.props.navigation.navigate("myorder")  
           this.setState({isSpinner:false})            
         }
       } else {
@@ -179,7 +179,7 @@ export default class index extends Component {
           Alert.alert("Message",acceptOrderResponse.response.errorMessage)
           this.setState({isSpinner:false}) 
           console.log('getting reponse here=================',acceptOrderResponse.response);  
-          this.props.navigation.navigate("home")              
+          this.props.navigation.navigate("myorder")              
         }
       } else {
         ALert.alert('Error', acceptOrderResponse.response.errorMessage);
